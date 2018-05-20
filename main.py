@@ -4,7 +4,7 @@ import os
 
 bot = commands.Bot(description="Use me to organise your own roles", command_prefix="/")
 
-Token = os.getenv("TOKEN")
+Token = os.getenv("Token")
 if Token is None:
     Token = open("token.txt", "r").read()
 
