@@ -22,6 +22,7 @@ async def role(ctx, *, msg):
     The True/False value represents whether you want to add it (True) or remove it (False)"""
     role_name, add = msg.split()[:2]
     change_to = None
+    role_name = role_name[0].upper() + role_name[1:].lower()
     for role in ctx.message.server.roles:
         if role.name == role_name:
             change_to = role
