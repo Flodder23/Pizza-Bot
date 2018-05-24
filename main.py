@@ -12,6 +12,15 @@ if Token is None:
 async def on_ready():
     await bot.change_presence(game=discord.Game(name="type \"/help\" for help"))
     print("Ready")
+    
+@bot.event
+async def on_member_join(member):
+    role_name = "Online"
+    change_to = None
+    for role in member.server.roles:
+        if role.name == role_name:
+            change_to = role
+    await bot.add_roles(member, change_to)
 
 @bot.command(pass_context=True)
 async def role(ctx, *, msg):
@@ -22,10 +31,10 @@ async def role(ctx, *, msg):
     The True/False value represents whether you want to add it (True) or remove it (False)"""
     role_name, add = msg.split()[:2]
     change_to = None
-    role_name = role_name[0].upper() + role_name[1:].lower()
     for role in ctx.message.server.roles:
-        if role.name == role_name:
+        if role.name.lower() == role_name.lower():
             change_to = role
+            role_name = role.name
     if change_to is not None:
         if role_name in ("Gmod", "Minecraft"):
                 try:
