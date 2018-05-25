@@ -1,12 +1,14 @@
 import discord
 from discord.ext import commands
 import os
+import datetime
 
 bot = commands.Bot(description="Use me to organise your own roles", command_prefix="/")
 
 Token = os.getenv("Token")
 if Token is None:
     Token = open("token.txt", "r").read()
+    bot = commands.Bot(description="Use me to organise your own roles", command_prefix="\\")
 
 @bot.event
 async def on_ready():
@@ -52,5 +54,50 @@ async def role(ctx, *, msg):
             await bot.say("Sorry, I don't have the right permissions to deal with that role.")
     else:
         await bot.say("Sorry, I couldn't find that role")
+
+@bot.group()
+async def stats():
+    pass
+
+@stats.command(pass_context=True)
+async def gmod(ctx, *, since):
+    """Some stats about Gmod pings
+    message should look like:
+        /stats gmod [year.month.day]
+    eg.
+        /stats gmod 18.1.1
+    would get only stats for pings after 01.01.2018
+    if there is an error decoding the date argument, there is no limit placed on the time"""
+    msg_count = 0
+    people = {}
+    since = since.split(".")
+    try:
+        after = datetime.datetime(int(since[0]), int(since[1]), int(since[2]))
+    except:
+        after = None
+    for channel in ctx.message.server.channels:
+        async for m in bot.logs_from(channel):
+            if "@Gmod" in m.clean_content and (after is None or after < m.timestamp):
+                msg_count += 1
+                if m.author in people.keys():
+                    people[m.author][1] += 1
+                else:
+                    people[m.author] = [m.author.mention, 1]
+    max = 0
+    ppl = []
+    for person in people.items():
+        person = person[1]
+        if person[1] == max:
+            ppl.append(person)
+        elif person[1] > max:
+            ppl = [person]
+            max = person[1]
+    output = "The Gmod role has been pinged a total of %s times"%msg_count
+    o = ""
+    for person in ppl:
+        o += person[0] + ", "
+    if max > 0:
+        output += " with " + o[:-2] + " pinging the most, with %s pings"%max
+    await bot.say(output + ".")
 
 bot.run(Token)
