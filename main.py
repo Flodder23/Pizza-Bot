@@ -57,6 +57,7 @@ async def role(ctx, *, msg):
 
 @bot.group()
 async def stats():
+    """Yay stats"""
     pass
 
 @stats.command(pass_context=True)
@@ -76,7 +77,7 @@ async def gmod(ctx, *, since):
     except:
         after = None
     for channel in ctx.message.server.channels:
-        async for m in bot.logs_from(channel):
+        async for m in bot.logs_from(channel, limit=9999999):
             if "@Gmod" in m.clean_content and (after is None or after < m.timestamp):
                 msg_count += 1
                 if m.author in people.keys():
