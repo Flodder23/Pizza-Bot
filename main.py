@@ -38,7 +38,8 @@ async def role(ctx, *, msg):
             change_to = role
             role_name = role.name
     if change_to is not None:
-        if role_name in ("Gmod", "Minecraft", "TF2"):
+        #if role_name in ("Gmod", "Minecraft", "TF2"):
+        if not role_name in ("Online"):
                 try:
                     if add.lower() == "true":
                         await bot.add_roles(ctx.message.author, change_to)
