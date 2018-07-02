@@ -31,7 +31,8 @@ async def role(ctx, *, msg):
         /role [role name] [True/False]
     The role name should be "Gmod", "Minecraft", etc.
     The True/False value represents whether you want to add it (True) or remove it (False)"""
-    role_name, add = msg.split()[:2]
+    role_name = msg.split()[:-1]
+    add = msg.split()[-1]
     change_to = None
     for role in ctx.message.server.roles:
         if role.name.lower() == role_name.lower():
