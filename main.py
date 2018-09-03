@@ -17,10 +17,9 @@ async def on_ready():
     
 @bot.event
 async def on_member_join(member):
-    role_name = "Online"
     change_to = None
     for role in member.server.roles:
-        if role.name == role_name:
+        if role.name.lower() == "online":
             change_to = role
     await bot.add_roles(member, change_to)
 
@@ -40,7 +39,7 @@ async def role(ctx, *, msg):
             role_name = role.name
     if change_to is not None:
         #if role_name in ("Gmod", "Minecraft", "TF2"):
-        if not role_name in ("Online"):
+        if not role_name in ("Online"):  # Blacklist - used "in" for future
                 try:
                     if add.lower() == "true":
                         await bot.add_roles(ctx.message.author, change_to)
@@ -102,5 +101,24 @@ async def gmod(ctx, *, since):
     if max > 0:
         output += " with " + o[:-2] + " pinging the most, with %s pings"%max
     await bot.say(output + ".")
+
+@bot.command(pass_context=True)
+async def poll(self, ctx, *, msg):
+    """Creates a poll.
+    The poll should be in the following form:
+    >poll question; option1; option2; etc."""
+    msg = msg.split(";")
+    output = "**" + ctx.message.author.name + "** asked **" + msg[0] + "**\n"
+    blanks = 0
+    for option in range(1, len(msg)):
+        if msg[option] == "":
+            blanks += 1
+        else:
+            output += ":regional_indicator_" + chr(96 + option - blanks) + ": " + msg[option] + "\n"
+    poll_msg = await self.bot.say(output + "\n React with your answer!")
+    for a in range(len(msg) - blanks - 1):
+        await self.bot.add_reaction(poll_msg, eval("\"\\N{REGIONAL INDICATOR SYMBOL LETTER " + chr(65 + a) + "}\""))
+    await self.bot.delete_message(ctx.message)
+
 
 bot.run(Token)
