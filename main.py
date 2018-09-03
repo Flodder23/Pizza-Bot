@@ -103,7 +103,7 @@ async def gmod(ctx, *, since):
     await bot.say(output + ".")
 
 @bot.command(pass_context=True)
-async def poll(self, ctx, *, msg):
+async def poll(ctx, *, msg):
     """Creates a poll.
     The poll should be in the following form:
     >poll question; option1; option2; etc."""
@@ -115,10 +115,10 @@ async def poll(self, ctx, *, msg):
             blanks += 1
         else:
             output += ":regional_indicator_" + chr(96 + option - blanks) + ": " + msg[option] + "\n"
-    poll_msg = await self.bot.say(output + "\n React with your answer!")
+    poll_msg = await bot.say(output + "\n React with your answer!")
     for a in range(len(msg) - blanks - 1):
-        await self.bot.add_reaction(poll_msg, eval("\"\\N{REGIONAL INDICATOR SYMBOL LETTER " + chr(65 + a) + "}\""))
-    await self.bot.delete_message(ctx.message)
+        await bot.add_reaction(poll_msg, eval("\"\\N{REGIONAL INDICATOR SYMBOL LETTER " + chr(65 + a) + "}\""))
+    await bot.delete_message(ctx.message)
 
 
 bot.run(Token)
