@@ -45,7 +45,7 @@ async def role(ctx, *, msg):
                     if add.lower() == "true":
                         await bot.add_roles(ctx.message.author, change_to)
                         await bot.say("You now have the %s role" %role_name)
-                        await bot.send_message(ctx.message.author, "Welcome to the %s role, be sure to check out the important info channels before playing!0 %role_name")
+                        await bot.send_message(ctx.message.author, "Welcome to the %s role, be sure to check out the important info channels before playing!" %role_name)
                     elif add.lower() == "false":
                         await bot.remove_roles(ctx.message.author, change_to)
                         await bot.say("You no longer have the %s role" % role_name)
