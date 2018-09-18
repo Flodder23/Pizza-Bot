@@ -3,6 +3,17 @@ from discord.ext import commands
 import os
 import datetime
 
+
+def text_list(txt):
+    if len(txt) == 0:
+        return ""
+    elif len(txt) == 1:
+             return txt[0]
+    else:
+        return ", ".join(txt[:-1]) + " and " + txt[-1]
+
+
+
 bot = commands.Bot(description="Use me to organise your own roles", command_prefix="/")
 
 Token = os.getenv("Token")
@@ -14,6 +25,7 @@ if Token is None:
 async def on_ready():
     await bot.change_presence(game=discord.Game(name="type \"/help\" for help"))
     print("Ready")
+            
     
 @bot.event
 async def on_member_join(member):
@@ -22,7 +34,11 @@ async def on_member_join(member):
         if role.name.lower() == "online":
             change_to = role
     await bot.add_roles(member, change_to)
-    await bot.send_message(member, "Welcome to the Pizza Time server! Make sure you read <449160085726429185>.")
+    c = []
+    for channel in member.server.channels:
+        if "info" in channel.name and ("server" in channel.name or "community" in channel.name):
+            c.append(channel.mention)
+    await bot.send_message(member, "Welcome to the Pizza Time server! Make sure you read %s."%text_list(c))
 
 @bot.command(pass_context=True)
 async def role(ctx, role_name):
@@ -32,14 +48,11 @@ async def role(ctx, role_name):
     The role name should be "Gmod", "Minecraft", etc.
     If you aready have the role, it will be removed, otherwise it will be added to you."""
 
-    print("um....")
-    print(role_name)
     change_to = None
     for role in ctx.message.server.roles:
         if role.name.lower() == role_name.lower():
             change_to = role
             role_name = role.name
-    print(ctx.message.author.roles)
     if change_to is not None:
         if not role_name in ("Online"):  # Blacklist - used "in" for future
                 try:
@@ -50,7 +63,11 @@ async def role(ctx, role_name):
                     else:
                         await bot.add_roles(ctx.message.author, change_to)
                         await bot.say("You now have the %s role" %role_name)
-                        await bot.send_message(ctx.message.author, "Welcome to the %s role, be sure to check out the important info channels before playing!" %role_name)
+                        c = []
+                        for channel in ctx.message.server.channels:
+                            if "info" in channel.name and role_name.lower() in channel.name.lower():
+                                c.append(channel.mention)
+                        await bot.send_message(ctx.message.author, "Welcome to the %s role,"%role_name + " be sure to check out %s before playing!"%text_list(c))
     
                 except discord.Forbidden:
                     await bot.say("Sorry, I don't have the right permissions to change your roles.")
@@ -126,6 +143,13 @@ async def poll(ctx, *, msg):
 
 @bot.command()
 async def announce():
-    await bot.say("Added feature: You no longer have to put \"true\" or \"false\" at the end of role requests.")
+    await bot.say("Added feature/Removed annoying feature: You no longer have to put \"true\" or \"false\" at the end of role requests.")
+
+
+@bot.command()
+async def test():
+    await bot.say("<#445690428923314196>")
+
+
 
 bot.run(Token)
