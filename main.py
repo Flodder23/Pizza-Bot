@@ -125,7 +125,7 @@ async def poll(ctx, *, msg):
 
 
 @bot.command()
-async def announce(ctx):
-    await bot.say("You no longer have to put \"true\" or \"false\" at the end of role requests.")
+async def announce():
+    await bot.say("Added feature: You no longer have to put \"true\" or \"false\" at the end of role requests.")
 
 bot.run(Token)
