@@ -22,35 +22,36 @@ async def on_member_join(member):
         if role.name.lower() == "online":
             change_to = role
     await bot.add_roles(member, change_to)
-    await bot.send_message(member, "Welcome to the Pizza Time server! Make sure you read the information channel.")
+    await bot.send_message(member, "Welcome to the Pizza Time server! Make sure you read <449160085726429185>.")
 
 @bot.command(pass_context=True)
-async def role(ctx, *, msg):
+async def role(ctx, role_name):
     """Manage your roles.
     Should look like:
-        /role [role name] [True/False]
+        /role [role name]
     The role name should be "Gmod", "Minecraft", etc.
-    The True/False value represents whether you want to add it (True) or remove it (False)"""
-    role_name = " ".join(msg.split()[:-1])
-    add = msg.split()[-1]
+    If you aready have the role, it will be removed, otherwise it will be added to you."""
+
+    print("um....")
+    print(role_name)
     change_to = None
     for role in ctx.message.server.roles:
         if role.name.lower() == role_name.lower():
             change_to = role
             role_name = role.name
+    print(ctx.message.author.roles)
     if change_to is not None:
-        #if role_name in ("Gmod", "Minecraft", "TF2"):
         if not role_name in ("Online"):  # Blacklist - used "in" for future
                 try:
-                    if add.lower() == "true":
+                    if any([r.name == role_name for r in ctx.message.author.roles]):
+                        await bot.remove_roles(ctx.message.author, change_to)
+                        await bot.say("You no longer have the %s role" % role_name)
+                        
+                    else:
                         await bot.add_roles(ctx.message.author, change_to)
                         await bot.say("You now have the %s role" %role_name)
                         await bot.send_message(ctx.message.author, "Welcome to the %s role, be sure to check out the important info channels before playing!" %role_name)
-                    elif add.lower() == "false":
-                        await bot.remove_roles(ctx.message.author, change_to)
-                        await bot.say("You no longer have the %s role" % role_name)
-                    else:
-                        await bot.say("Sorry, I couldn't tell whether you wanted me to add (\"True\") or remove (\"False\") the role.")
+    
                 except discord.Forbidden:
                     await bot.say("Sorry, I don't have the right permissions to change your roles.")
         else:
@@ -122,5 +123,9 @@ async def poll(ctx, *, msg):
         await bot.add_reaction(poll_msg, eval("\"\\N{REGIONAL INDICATOR SYMBOL LETTER " + chr(65 + a) + "}\""))
     await bot.delete_message(ctx.message)
 
+
+@bot.command()
+async def announce(ctx):
+    await bot.say("You no longer have to put \"true\" or \"false\" at the end of role requests.")
 
 bot.run(Token)
