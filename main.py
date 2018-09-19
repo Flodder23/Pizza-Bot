@@ -31,7 +31,7 @@ async def on_ready():
 async def on_member_join(member):
     change_to = None
     for role in member.server.roles:
-        if role.name.lower() == "online":
+        if role.name.lower() == "gamers":
             change_to = role
     await bot.add_roles(member, change_to)
     c = []
@@ -44,20 +44,47 @@ async def on_member_join(member):
 @bot.command(pass_context=True)
 async def debug(ctx, *, msg):
     print(msg)
+    for c in ctx.message.server.channels:
+        if c.name == "whitelist":
+            channel = c
+            break
+    async for m in bot.logs_from(channel, limit=1): break
+    print(m.content)
+    await bot.edit_message(m, """<@144543622015090690> - Cyanites
+<@177430681964642304> - adne001
+<@207892158097653760> - mickymoley
+<@142362397443751938> - Poncho
+<@130688673304936448> - Fishul
+<@286601488703291395> - Nomesta
+<@198520419882500096> - stoodle3
+<@278277907145555978> - MovietheMovie
+<@197422901534654465> - micrajo
+<@269911203562782730> - King_Liger
+<@144574736515465216> - Lemon_Nade
+<@383657347286827018> - EpicTomBoyGamer
+<@181697371678179329> - COASTERGUY246
+<@223826386853298177> - ZakaRakaTV
+<@212231429759827969> - Mamboman09
+<@231439959523852288> - HedgeHoggerz
+<@134832134849298433> - Forzaguy""")
 
 
 @bot.command(pass_context=True)
 async def whitelist(ctx, *, msg):
     msg = msg.split()
     if len(msg) == 3 and msg[1] == "for" and any([role.name == "Mods" for role in ctx.message.author.roles]):
+        print(msg)
+        msg[2] = "".join(msg[2].split("!"))
+        print(msg)
         adder = None
         for member in ctx.message.server.members:
-            if member.mention == msg[-1]:
-                adder = member.mention
+            if "".join(member.mention.split("!")) == msg[2]:
+                adder = "".join(member.mention.split("!"))
                 break
         if adder is None: return
-    else:
-        adder = ctx.message.author.mention
+        print(adder)
+    elif len(msg) == 1:
+        adder = "".join(ctx.message.author.mention.split("!"))
     channel = None
     console = None
     for c in ctx.message.server.channels:
@@ -100,7 +127,7 @@ async def role(ctx, role_name):
             change_to = role
             role_name = role.name
     if change_to is not None:
-        if not role_name in ("Online"):  # Blacklist - used "in" for future
+        if not role_name in ("Gamers"):  # Blacklist - used "in" for future
                 try:
                     if any([r.name == role_name for r in ctx.message.author.roles]):
                         await bot.remove_roles(ctx.message.author, change_to)
@@ -185,17 +212,6 @@ async def poll(ctx, *, msg):
     for a in range(len(msg) - blanks - 1):
         await bot.add_reaction(poll_msg, eval("\"\\N{REGIONAL INDICATOR SYMBOL LETTER " + chr(65 + a) + "}\""))
     await bot.delete_message(ctx.message)
-
-
-@bot.command()
-async def announce():
-    await bot.say("Added feature/Removed annoying feature: You no longer have to put \"true\" or \"false\" at the end of role requests.")
-
-
-@bot.command()
-async def test():
-    await bot.say("<#445690428923314196>")
-
 
 
 bot.run(Token)
