@@ -13,7 +13,6 @@ def text_list(txt):
         return ", ".join(txt[:-1]) + " and " + txt[-1]
 
 
-
 bot = commands.Bot(description="Use me to organise your own roles", command_prefix="/")
 
 Token = os.getenv("Token")
@@ -44,29 +43,6 @@ async def on_member_join(member):
 @bot.command(pass_context=True)
 async def debug(ctx, *, msg):
     print(msg)
-    for c in ctx.message.server.channels:
-        if c.name == "whitelist":
-            channel = c
-            break
-    async for m in bot.logs_from(channel, limit=1): break
-    print(m.content)
-    await bot.edit_message(m, """<@144543622015090690> - Cyanites
-<@177430681964642304> - adne001
-<@207892158097653760> - mickymoley
-<@142362397443751938> - Poncho
-<@130688673304936448> - Fishul
-<@286601488703291395> - Nomesta
-<@198520419882500096> - stoodle3
-<@278277907145555978> - MovietheMovie
-<@197422901534654465> - micrajo
-<@269911203562782730> - King_Liger
-<@144574736515465216> - Lemon_Nade
-<@383657347286827018> - EpicTomBoyGamer
-<@181697371678179329> - COASTERGUY246
-<@223826386853298177> - ZakaRakaTV
-<@212231429759827969> - Mamboman09
-<@231439959523852288> - HedgeHoggerz
-<@134832134849298433> - Forzaguy""")
 
 
 @bot.command(pass_context=True)
