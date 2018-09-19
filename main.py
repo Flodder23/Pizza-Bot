@@ -40,6 +40,52 @@ async def on_member_join(member):
             c.append(channel.mention)
     await bot.send_message(member, "Welcome to the Pizza Time server! Make sure you read %s."%text_list(c))
 
+
+@bot.command(pass_context=True)
+async def debug(ctx, *, msg):
+    print(msg)
+
+
+@bot.command(pass_context=True)
+async def whitelist(ctx, *, msg):
+    msg = msg.split()
+    if len(msg) == 3 and msg[1] == "for" and any([role.name == "Mods" for role in ctx.message.author.roles]):
+        adder = None
+        for member in ctx.message.server.members:
+            if member.mention == msg[-1]:
+                adder = member.mention
+                break
+        if adder is None: return
+    else:
+        adder = ctx.message.author.mention
+    channel = None
+    console = None
+    for c in ctx.message.server.channels:
+        if c.name == "whitelist":
+            channel = c
+            break
+    for c in ctx.message.server.channels:
+        if c.name == "server-console":
+            console = c
+            break
+    if not (channel is None or console is None):
+        async for m in bot.logs_from(channel, limit=1): break
+        output = ""
+        remove = ""
+        for line in m.content.split("\n"):
+            if line.split()[0] == adder:
+                await bot.send_message(console, "whitelist remove " + line.split()[-1])
+                remove = line.split()[-1]
+            else:
+                output += line + "\n"
+        await bot.send_message(console, "whitelist add " + msg[0])
+        await bot.edit_message(m, output + adder + " - " + msg[0])
+        if remove == "":
+            output = ""
+        else:
+            output = "The nickname **" + remove + "** was removed from the whitelist.\n"
+        await bot.say(output + "The nickname **" + msg[0] + "** was added to the whitelist.")
+
 @bot.command(pass_context=True)
 async def role(ctx, role_name):
     """Manage your roles.
