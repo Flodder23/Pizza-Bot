@@ -61,6 +61,8 @@ async def whitelist(ctx, *, msg):
         print(adder)
     elif len(msg) == 1:
         adder = "".join(ctx.message.author.mention.split("!"))
+    else:
+        return
     channel = None
     console = None
     for c in ctx.message.server.channels:
