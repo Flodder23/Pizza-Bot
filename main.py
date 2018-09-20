@@ -37,7 +37,40 @@ async def on_member_join(member):
     for channel in member.server.channels:
         if "info" in channel.name and ("server" in channel.name or "community" in channel.name):
             c.append(channel.mention)
-    await bot.send_message(member, "Welcome to the Pizza Time server! Make sure you read %s."%text_list(c))
+
+    channel = None
+    for channel in member.server.channels:
+        if channel.name == "general":
+            break
+    if channel is not None:
+        await bot.send_message(channel, "Welcome %s to the Pizza Time server! Make sure you read %s."%(member.mention, text_list(c)))
+
+
+@bot.event
+async def on_member_remove(member):
+    channel = None
+    console = None
+    general = None
+    for c in member.server.channels:
+        if c.name == "whitelist":
+            channel = c
+        elif c.name == "server-console":
+            console = c
+        elif c.name == "general":
+            general = c
+        
+    async for m in bot.logs_from(channel, limit=1): break
+    whitelist = m.content.split("\n")
+    output = ""
+    info = ""
+    for line in whitelist:
+        if line.split()[0] == member.mention:
+            await bot.send_message(console, "whitelist remove " + line.split()[-1])
+            info = "\nThe nickname **%s** was removed from the whitelist."%line.split()[-1]
+        else:
+            output += line + "\n"
+    await bot.edit_message(m, output)
+    await bot.send_message(general, member.mention + " has just left the server" + info)
 
 
 @bot.command(pass_context=True)
@@ -49,19 +82,17 @@ async def debug(ctx, *, msg):
 async def whitelist(ctx, *, msg):
     msg = msg.split()
     if len(msg) == 3 and msg[1] == "for" and any([role.name == "Mods" for role in ctx.message.author.roles]):
-        print(msg)
         msg[2] = "".join(msg[2].split("!"))
-        print(msg)
         adder = None
         for member in ctx.message.server.members:
             if "".join(member.mention.split("!")) == msg[2]:
                 adder = "".join(member.mention.split("!"))
                 break
         if adder is None: return
-        print(adder)
-    elif len(msg) == 1:
+    elif len(msg) == 1 and any(role.name.lower() == "minecraft" for role in ctx.message.author.roles):
         adder = "".join(ctx.message.author.mention.split("!"))
     else:
+        await bot.say("Sorry, I couldn't do that - You may not have the right roles, or your message may have not been in the correct format.")
         return
     channel = None
     console = None
@@ -108,17 +139,40 @@ async def role(ctx, role_name):
         if not role_name in ("Gamers"):  # Blacklist - used "in" for future
                 try:
                     if any([r.name == role_name for r in ctx.message.author.roles]):
+                        info = ""
+                        if change_to.name.lower() == "minecraft":
+                            channel = None
+                            console = None
+                            general = None
+                            for c in ctx.message.server.channels:
+                                if c.name == "whitelist":
+                                    channel = c
+                                elif c.name == "server-console":
+                                    console = c
+                                elif c.name == "general":
+                                    general = c
+                                
+                            async for m in bot.logs_from(channel, limit=1): break
+                            whitelist = m.content.split("\n")
+                            output = ""
+                            info = ""
+                            for line in whitelist:
+                                if line.split()[0] == ctx.message.author.mention:
+                                    await bot.send_message(console, "whitelist remove " + line.split()[-1])
+                                    info = "\nThe nickname **%s** was removed from the whitelist."%line.split()[-1]
+                                else:
+                                    output += line + "\n"
+                            await bot.edit_message(m, output)
                         await bot.remove_roles(ctx.message.author, change_to)
-                        await bot.say("You no longer have the %s role" % role_name)
+                        await bot.say("You no longer have the %s role."%role_name + info)
                         
                     else:
                         await bot.add_roles(ctx.message.author, change_to)
-                        await bot.say("You now have the %s role" %role_name)
                         c = []
                         for channel in ctx.message.server.channels:
                             if "info" in channel.name and role_name.lower() in channel.name.lower():
                                 c.append(channel.mention)
-                        await bot.send_message(ctx.message.author, "Welcome to the %s role,"%role_name + " be sure to check out %s before playing!"%text_list(c))
+                        await bot.say("You now have the %s role, be sure to check out %s before playing!" %(role_name, text_list(c)))
     
                 except discord.Forbidden:
                     await bot.say("Sorry, I don't have the right permissions to change your roles.")
