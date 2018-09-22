@@ -78,39 +78,53 @@ async def debug(ctx, *, msg):
     print(msg)
     #channel = None
     #for c in ctx.message.server.channels:
-    #    if c.name == "whitelist":
+    #    if c.name == "":
     #        channel = c
     #async for m in bot.logs_from(channel, limit=1): break
-    #print(m.content)
     #await bot.edit_message(m, """""")
+    #await bot.send_message(channel, """""")
 
 
 @bot.command(pass_context=True)
 async def whitelist(ctx, *, msg):
     msg = msg.split()
-    if len(msg) == 3 and msg[1] == "for" and any([role.name == "Mods" for role in ctx.message.author.roles]):
-        msg[2] = "".join(msg[2].split("!"))
-        adder = None
-        for member in ctx.message.server.members:
-            if "".join(member.mention.split("!")) == msg[2]:
-                adder = "".join(member.mention.split("!"))
-                break
-        if adder is None: return
-    elif len(msg) == 1 and any(role.name.lower() == "minecraft" for role in ctx.message.author.roles):
-        adder = "".join(ctx.message.author.mention.split("!"))
-    else:
-        await bot.say("Sorry, I couldn't do that - You may not have the right roles, or your message may have not been in the correct format.")
-        return
-    channel = None
+    wl_channel = None
+    bl_channel = None
     console = None
     for c in ctx.message.server.channels:
         if c.name == "whitelist":
             channel = c
-            break
-    for c in ctx.message.server.channels:
-        if c.name == "server-console":
+        elif c.name == "server-console":
             console = c
-            break
+        elif c.name == "blacklist":
+            bl_channel = c
+    async for bl_old in bot.logs_from(bl_channel, limit=1): break
+    
+    if any([role.name == "Mods" for role in ctx.message.author.roles]):
+        if len(msg) == 3 and msg[1] == "for":
+            msg[2] = "".join(msg[2].split("!"))
+            adder = None
+            for member in ctx.message.server.members:
+                if "".join(member.mention.split("!")) == msg[2]:
+                    adder = "".join(member.mention.split("!"))
+                    break
+            if adder is None: return
+        elif len(msg) == 1:
+            if msg[0] in bl_old.content.split("\n"):
+                bl_new = bl_old.content.split("\n")
+                del bl_new[bl_new.index(msg[0])]
+                await bot.edit_message(bl_old, "\n".join(bl_new))
+                await bot.say("The name **%s** was removed from the blacklist."%msg[0])
+                return
+            else:
+                adder = "".join(ctx.message.author.mention.split("!"))
+            
+    elif len(msg) == 1 and any(role.name.lower() == "minecraft" for role in ctx.message.author.roles) and not (msg[0] in bl_old.content.split("\n") or "".join(ctx.message.author.mention.split("!")) in bl_old.content.split("\n")):
+        adder = "".join(ctx.message.author.mention.split("!"))
+    else:
+        await bot.say("Sorry, I couldn't do that - You may not have the right roles, or your message may have not been in the correct format.")
+        return
+
     if not (channel is None or console is None):
         async for m in bot.logs_from(channel, limit=1): break
         output = ""
@@ -128,6 +142,57 @@ async def whitelist(ctx, *, msg):
         else:
             output = "The nickname **" + remove + "** was removed from the whitelist.\n"
         await bot.say(output + "The nickname **" + msg[0] + "** was added to the whitelist.")
+
+
+@bot.command(pass_context=True)
+async def blacklist(ctx, *, msg):
+    msg = msg.split()[0]
+    if any(role.name.lower() == "mods" for role in ctx.message.author.roles):
+        tag = None
+        nickname = None
+        wl_channel = None
+        console = None
+        bl_channel = None
+        print(ctx.message.content)
+        for c in ctx.message.server.channels:
+            if c.name == "whitelist":
+                wl_channel = c
+            elif c.name == "server-console":
+                console = c
+            elif c.name == "blacklist":
+                bl_channel = c
+        async for bl_old in bot.logs_from(bl_channel, limit=1): break
+        async for wl_old in bot.logs_from(wl_channel, limit=1): break
+        bl_new = bl_old.content
+        wl_new = []
+        if msg.startswith("<"):
+            tag = "".join(msg.split("!"))
+            for line in wl_old.content.split("\n"):
+                if line.split()[0] == tag:
+                    nickname = line.split()[-1]
+                else:
+                    wl_new.append(line)
+        else:
+            nickname = msg
+            for line in wl_old.content.split("\n"):
+                if line.split()[-1] == nickname:
+                    tag = line.split()[0]
+                else:
+                    wl_new.append(line)
+        wl_new = "\n".join(wl_new)
+        output = []
+        if tag is not None:
+            bl_new += "\n" + tag
+            output.append("**%s** can no longer whitelist names."%tag)
+        if nickname is not None:
+            bl_new += "\n" + nickname
+            output.append("The nickname **%s** has been added to the blacklist."%nickname)
+            await bot.send_message(console, "whitelist remove " + nickname)
+        output = "\n".join(output)
+        await bot.edit_message(wl_old, wl_new)
+        await bot.edit_message(bl_old, bl_new)
+        await bot.say(output)
+
 
 @bot.command(pass_context=True)
 async def role(ctx, role_name):
