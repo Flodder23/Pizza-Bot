@@ -76,6 +76,13 @@ async def on_member_remove(member):
 @bot.command(pass_context=True)
 async def debug(ctx, *, msg):
     print(msg)
+    #channel = None
+    #for c in ctx.message.server.channels:
+    #    if c.name == "whitelist":
+    #        channel = c
+    #async for m in bot.logs_from(channel, limit=1): break
+    #print(m.content)
+    #await bot.edit_message(m, """""")
 
 
 @bot.command(pass_context=True)
