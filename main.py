@@ -70,7 +70,7 @@ async def on_member_remove(member):
         else:
             output += line + "\n"
     await bot.edit_message(m, output)
-    await bot.send_message(general, member.mention + " has just left the server" + info)
+    await bot.send_message(general, member.mention + " (%s) has just left the server"%member.name + info)
 
 
 @bot.command(pass_context=True)
