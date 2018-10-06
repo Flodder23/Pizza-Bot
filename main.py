@@ -40,7 +40,7 @@ async def on_member_join(member):
 
     channel = None
     for channel in member.server.channels:
-        if channel.name == "general":
+        if channel.name == "welcome":
             break
     if channel is not None:
         await bot.send_message(channel, "Welcome %s to the Pizza Time server! Make sure you read %s."%(member.mention, text_list(c)))
