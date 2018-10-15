@@ -40,7 +40,7 @@ async def on_member_join(member):
 
     channel = None
     for channel in member.server.channels:
-        if channel.name == "welcome":
+        if channel.name == "general":
             break
     if channel is not None:
         await bot.send_message(channel, "Welcome %s to the Pizza Time server! Make sure you read %s."%(member.mention, text_list(c)))
@@ -303,7 +303,7 @@ async def gmod(ctx, *, since):
 async def poll(ctx, *, msg):
     """Creates a poll.
     The poll should be in the following form:
-    >poll question; option1; option2; etc."""
+    /poll question; option1; option2; etc."""
     msg = msg.split(";")
     output = "**" + ctx.message.author.name + "** asked **" + msg[0] + "**\n"
     blanks = 0
