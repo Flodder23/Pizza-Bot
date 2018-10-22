@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import os
 import datetime
+import math as maths
 
 
 def text_list(txt):
@@ -253,10 +254,85 @@ async def role(ctx, role_name):
     else:
         await bot.say("Sorry, I couldn't find that role")
 
+
 @bot.group()
 async def stats():
     """Yay stats"""
     pass
+
+
+@stats.command(pass_context=True)
+async def minecraft(ctx, *, msg=""):
+    channel = None
+    for c in ctx.message.server.channels:
+        if c.name == "server-console":
+            channel = c
+            break
+    online = []
+    total = []
+    if channel is not None:
+        e = await bot.say("Checked 0 logs.")
+        at = 0
+        async for message in bot.logs_from(channel, limit=99999):
+            for line in message.content.split("\n"):
+                try:
+                    at += 1
+                    if at % 1000 == 0:
+                        await bot.edit_message(e, "Checked %s logs."%at)
+                    date = line.split("]")[0][1:]
+                    line = "]".join(line.split("]")[1:])[1:]
+                    if line.split()[1] == "logged":
+                        in_online = False
+                        name = line.split()[0].split("[")[0]
+                        for player in online:
+                            if player[0] == name:
+                                in_online = True
+                                break
+                        if not in_online:
+                            online.append([name, date.split()[4]])
+                    elif line.endswith("left the game"):
+                        c1 = 0
+                        while c1 < len(online):
+                            if online[c1][0] == line.split()[0]:
+                                c2 = 0
+                                done = False
+                                name = online[c1][0]
+                                t1, t2 = date.split()[4].split(":"), online[c1][1].split(":")
+                                for a in range(3):
+                                    t1[a] = int(t1[a])
+                                    t2[a] = int(t2[a])
+                                if t2[0] - t1[0] < 0:
+                                    t2[0] += 24
+                                n = []
+                                for a in range(3):
+                                    n.append(t2[a] - t1[a])
+                                tot = 24 * 60 * n[0]
+                                tot += 60 * n[1]
+                                tot += n[2]
+                                while c2 < len(total):
+                                    if not done and total[c2][0] == online[c1][0]:
+                                        total[c2][1] += tot
+                                        total[c2][2] += 1
+                                        done = True
+                                    c2 += 1
+                                if not done:
+                                    total.append([online[c1][0], tot, 1])
+                            c1 += 1
+                except:
+                    pass
+        output = ""
+        def get_time(n):
+            return n[1]
+        total = sorted(total, key=get_time)
+        total.reverse()
+        for i in total:
+            secs = i[1]
+            mins = maths.floor(secs / 60)
+            secs -= mins * 60
+            hours = maths.floor(mins / 60)
+            mins -= hours * 60
+            output += str(i[0]) + "  -  " + str(hours) + ":" + str(mins) + ":" + str(secs) + "  -  over " + str(i[2]) + " sessions.\n"
+        await bot.say(output)
 
 @stats.command(pass_context=True)
 async def gmod(ctx, *, since):
@@ -298,6 +374,7 @@ async def gmod(ctx, *, since):
     if max > 0:
         output += " with " + o[:-2] + " pinging the most, with %s pings"%max
     await bot.say(output + ".")
+
 
 @bot.command(pass_context=True)
 async def poll(ctx, *, msg):
