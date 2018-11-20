@@ -37,10 +37,9 @@ async def on_raw_reaction_add(payload):
 		for role in guild.roles:
 			if role.name == emoji:
 				await user.add_roles(role)
-				m = await channel.send(user.mention + " now has the **%s** role."%emoji)
-				time.sleep(2)
-				await m.delete()
 				break
+		if not role.name == emoji:
+			await msg.remove_reaction(payload.emoji, user)
 
 
 @client.event
@@ -55,73 +54,68 @@ async def on_raw_reaction_remove(payload):
 			if role.name == emoji:
 				info = ""
 				if emoji == "Minecraft":
-					whitelist = None
+					m_info = None
 					console = None
 					for c in user.guild.channels:
-						if c.name == "whitelist":
-							whitelist = c
+						if c.name == "minecraft-info":
+							m_info = c
 						elif c.name == "server-console":
 							console = c
-					async for m in whitelist.history(limit=1): break
-					whitelist = m.content.split("\n")
-					output = ""
-					info = ""
-					for line in whitelist:
-						if line.split()[0] == user.mention:
-							await console.send("whitelist remove " + line.split()[-1])
-							info = "\nThe nickname **%s** was removed from the whitelist."%line.split()[-1]
-						else:
-							output += line + "\n"
-					await m.edit(content=output)
+					async for m in m_info.history(limit=100):
+						if m.content.startswith("**Whitelist:**") and m.author.name == "Pizza Bot":
+							whitelist = m.content.split("\n")
+							output = ""
+							info = ""
+							for line in whitelist:
+								if line.split()[0] == user.mention:
+									await console.send("whitelist remove " + line.split()[-1])
+								else:
+									output += line + "\n"
+							await m.edit(content=output)
+							break
 				await user.remove_roles(role)
-				m = await channel.send(user.mention + " no longer has the **%s** role."%emoji + info)
-				time.sleep(2)
-				await m.delete()
 				break
 
 
 @client.event
 async def on_member_join(member):
-	change_to = None
 	for role in member.guild.roles:
 		if role.name.lower() == "gamers":
-			change_to = role
+			await member.add_roles(role)
 			break
-	if change_to is not None:
-		await member.add_roles(change_to)
 
-	channel = None
 	for c in member.guild.channels:
 		if c.name == "general":
-			channel = c
+			await c.send("Welcome %s to the Pizza Time server!"%member.mention)
 			break
-	if channel is not None:
-		await channel.send("Welcome %s to the Pizza Time server! Make sure you read %s."%(member.mention, text_list(c)))
 
 
 @client.event
 async def on_member_remove(member):
-	channel = None
+	m_info = None
 	console = None
 	general = None
 	for c in member.guild.channels:
-		if c.name == "whitelist":
-			channel = c
+		if c.name == "minecraft-info":
+			m_info = c
 		elif c.name == "server-console":
 			console = c
 		elif c.name == "general":
 			general = c
-	async for m in channel.history(limit=1): break
-	whitelist = m.content.split("\n")
-	output = ""
-	info = ""
-	for line in whitelist:
-		if line.split()[0] == member.mention:
-			await console.send("whitelist remove " + line.split()[-1])
-			info = "\nThe nickname **%s** was removed from the whitelist."%line.split()[-1]
-		else:
-			output += line + "\n"
-	await m.edit(content=output)
+	async for m in m_info.history(limit=100):
+		print(1)
+		if m.content.startswith("**Whitelist:**") and m.author.name == "Pizza Bot":
+			print(2)
+			whitelist = m.content.split("\n")
+			output = ""
+			info = ""
+			for line in whitelist:
+				if line.split()[0] == member.mention:
+					await console.send("whitelist remove " + line.split()[-1])
+					info = "\nThe nickname **%s** was removed from the whitelist."%line.split()[-1]
+				else:
+					output += line + "\n"
+			await m.edit(content=output)
 	await general.send(member.mention + " (%s) has just left the server"%member.name + info)
 
 
@@ -130,16 +124,12 @@ async def whitelist(ctx, *, msg):
 	msg = msg.split()
 	adder = None
 	wl_channel = None
-	bl_channel = None
 	console = None
 	for c in ctx.message.guild.channels:
-		if c.name == "whitelist":
+		if c.name == "minecraft-info":
 			wl_channel = c
 		elif c.name == "server-console":
 			console = c
-		elif c.name == "blacklist":
-			bl_channel = c
-	async for bl_old in bl_channel.history(limit=1): break
 
 	if any([role.name == "Mods" for role in ctx.author.roles]):
 		if len(msg) == 3 and msg[1] == "for":
@@ -151,36 +141,33 @@ async def whitelist(ctx, *, msg):
 					break
 			if adder is None: retuen
 		elif len(msg) == 1:
-			if msg[0] in bl_old.content.split("\n"):
-				bl_new = bl_old.content.split("\n")
-				del bl_new[bl_new.index(msg[0])]
-				await bl_old.edit("\n".join(bl_new))
-				await ctx.channel.send("The name **%s** was removed from the blacklist."%msg[0])
-				return
-			else:
-				adder = "".join(ctx.author.mention.split("!"))
-	elif len(msg) == 1 and any([role.name.lower() == "minecraft" for role in ctx.guild.roles])  and not (msg[0] in bl_old.content.split("\n") or "".join(ctx.message.author.mention.split("!")) in bl_old.content.split("\n")):
+			adder = "".join(ctx.author.mention.split("!"))
+	elif len(msg) == 1 and any([role.name.lower() == "minecraft" for role in ctx.guild.roles]):
 		adder = "".join(ctx.author.mention.split("!"))
 	else:
 		await ctx.channel.send("Sorry, I couldn't do that - You may not have the right roles, or your message may have not been in the correct format.")
 	if not (wl_channel is None or console is None or adder is None):
-		async for m in wl_channel.history(limit=1): break
-		output = ""
-		remove = ""
-		for line in m.content.split("\n"):
-			if line.split()[0] == adder:
-				await console.send("whitelist remove " + line.split()[-1])
-				remove = line.split()[-1]
-			else:
-				output += line + "\n"
-		await console.send("whitelist add " + msg[0])
-		new_whitelist = output + adder + " - " + msg[0]
-		await m.edit(content=new_whitelist)
-		if remove == "":
-			output = ""
-		else:
-			output = "The nickname **" + remove + "** was removed from the whitelist.\n"
-		await ctx.channel.send(output + "The nickname **" + msg[0] + "** was added to the whitelist.")
+		async for m in wl_channel.history(limit=100):
+			if m.content.startswith("**Whitelist:**") and m.author.name == "Pizza Bot":
+				output = ""
+				remove = ""
+				for line in m.content.split("\n"):
+					if line.split()[0] == adder:
+						await console.send("whitelist remove " + line.split()[-1])
+						remove = line.split()[-1]
+					else:
+						output += line + "\n"
+				await console.send("whitelist add " + msg[0])
+				new_whitelist = output + adder + " - " + msg[0]
+				await m.edit(content=new_whitelist)
+				if remove == "":
+					output = ""
+				else:
+					output = "The nickname **" + remove + "** was removed from the whitelist.\n"
+				await ctx.channel.send(output + "The nickname **" + msg[0] + "** was added to the whitelist.")
+				break
+		if not m.content.startswith("**Whitelist:**"):
+			await ctx.channel.send("Sorry, I couldn't find the whitelist")
 
 
 client.run(Token)
