@@ -85,7 +85,7 @@ async def on_member_join(member):
 			break
 
 	for c in member.guild.channels:
-		if c.name == "general":
+		if c.name == "general-discussion":
 			await c.send("Welcome %s to the Pizza Time server!"%member.mention)
 			break
 
@@ -121,6 +121,11 @@ async def on_member_remove(member):
 
 @client.command(pass_context=True)
 async def whitelist(ctx, *, msg):
+	"""Use this to add a Minecraft username to the server whitelist.
+	
+	Should look like:  /whitelist [mc username]
+	
+	You must have the Minecraft role to add a username, and only one username per person is allowed."""
 	msg = msg.split()
 	adder = None
 	wl_channel = None
@@ -142,7 +147,7 @@ async def whitelist(ctx, *, msg):
 			if adder is None: retuen
 		elif len(msg) == 1:
 			adder = "".join(ctx.author.mention.split("!"))
-	elif len(msg) == 1 and any([role.name.lower() == "minecraft" for role in ctx.guild.roles]):
+	elif len(msg) == 1 and any([role.name.lower() == "minecraft" for role in ctx.author.roles]):
 		adder = "".join(ctx.author.mention.split("!"))
 	else:
 		await ctx.channel.send("Sorry, I couldn't do that - You may not have the right roles, or your message may have not been in the correct format.")
@@ -168,6 +173,19 @@ async def whitelist(ctx, *, msg):
 				break
 		if not m.content.startswith("**Whitelist:**"):
 			await ctx.channel.send("Sorry, I couldn't find the whitelist")
+
+
+@client.command(pass_context=True)
+async def role(ctx):
+	"""React to the message in #server-info to get a role"""
+	for channel in ctx.guild.channels:
+		if channel.name == "server-info":
+			await ctx.channel.send("React to the message in %s to get a role"%channel.mention)
+
+
+@client.command(pass_context=True)
+async def debug(ctx, *, msg):
+	print(msg)
 
 
 client.run(Token)
