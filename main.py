@@ -185,7 +185,7 @@ async def role(ctx):
 @client.command(pass_context=True)
 async def ping(ctx):
 	"""Sends a ping to ask if people want to play"""
-	message = await ctx.channel.send("@ here who wants to play now?")
+	message = await ctx.channel.send("@here who wants to play now?")
 	await message.add_reaction("✅")
 	await message.add_reaction("❎")
 
