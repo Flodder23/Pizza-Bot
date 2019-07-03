@@ -13,9 +13,9 @@ class HelpCommand extends Command {
 	exec(message, args) {
 		if (args.command) {
 			message.channel.send(new Discord.RichEmbed()
-				.setColor(16426522)
-				.setTitle(`**config.colour for ${args.command.id} command**`)
-				.setURL(`https://github.com/joegibby/Pizza-Bot/blob/master/commands/${args.command.id}.js`)
+				.setColor(config.colour)
+				.setTitle(`**Help for ${args.command.id} command**`)
+				.setURL(`https://github.com/joegibby/Pizza-Bot/tree/master/commands/${args.command.id}.js`)
 				.addField("Aliases", ` - ${args.command.aliases.join("\n - ")}\n`)
 				.addField("Description", args.command.description + "\n")
 				.addField("Usage", `\`${this.handler.prefix() + args.command.id} <${args.command.args.map(item => item.id).join("> <")}>\``)
@@ -28,7 +28,7 @@ class HelpCommand extends Command {
 			message.channel.send(new Discord.RichEmbed()
 				.setColor(config.colour)
 				.setTitle("**Joe's Bot Help**")
-				.setURL("https://github.com/joegibby/Pizza-Bot/blob/master")
+				.setURL("https://github.com/joegibby/Pizza-Bot/tree/master")
 				.addField("Info", `Bot made in Discord.js using discord-akairo by @Joe#5991.\nFor source code just click the title.\nType \`${this.handler.prefix()}help <command>\` for more information on a command.`)
 				.addField("Commands", `• ${cmds.map(item => item[0]).join("\n• ")}`, true)
 				.addField("Description", cmds.map(item => item[1]).join("\n"), true)

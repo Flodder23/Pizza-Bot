@@ -20,8 +20,6 @@ const client = new AkairoClient(
 	    prefix: prefix,
 	    commandDirectory: "./commands/",
 	    listenerDirectory: "./listeners/",
-	}, {
-		disableEveryone: true
 	}
 );
 
