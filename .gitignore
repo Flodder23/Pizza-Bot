@@ -1,5 +1,5 @@
-token.txt
-.idea/
-minecraft.txt
-old_main.py
-clippings.txt
+token.json
+node_modules/
+commands/debug.js
+whitelist.txt
+commands/whitelist.js

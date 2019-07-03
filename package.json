@@ -1,0 +1,18 @@
+{
+    "name": "Pizza-Bot",
+    "description": "Bot for the Pizza server",
+    "version": "0.0.0",
+    "main": "main.js",
+    "scripts": {
+        "start": "node main.js"
+    },
+    "dependencies": {
+        "discord-akairo": "^7.5.6",
+        "discord.js": "^11.4.2",
+        "fs": "0.0.1-security",
+        "moment": "^2.24.0",
+        "nodemon": "^1.18.11",
+        "sequelize": "^5.7.0",
+        "sqlite": "^3.0.3"
+    }
+}
