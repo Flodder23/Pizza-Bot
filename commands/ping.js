@@ -8,8 +8,8 @@ class PingCommand extends Command {
 	}
 
 	exec(message) {
-		return message.reply("ping").then(sent => {
-			sent.edit(`${sent} \`${sent.createdAt - message.createdAt}ms\``);
+		return message.reply("pong").then(sent => {
+			sent.edit(`${sent} (${sent.createdAt - message.createdAt}ms)`);
 		});
 	}
 }

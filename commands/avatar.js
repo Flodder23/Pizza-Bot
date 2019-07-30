@@ -10,11 +10,16 @@ class AvatarCommand extends Command {
 	}
 
 	exec(message, args) {
+		let desc;
 		if (message.content.split(" ").length == 1) {
 			args.member = message.member
+			desc = "No user was given, so showing your avatar:";
+		} else {
+			desc = `Showing ${args.member}'s avatar:`;
 		}
 		if (args.member) {
 			message.channel.send(new Discord.RichEmbed()
+				.setDescription(desc)
 				.setColor(16426522)
 				.setImage(args.member.user.avatarURL));
 		} else {

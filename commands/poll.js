@@ -11,7 +11,10 @@ class PollCommand extends Command {
 		});
 	}
 	async exec(message, args) {
-		let options = args.options.split(";").map(item => item.trim());
+		let msg = message.cleanContent.split(" ")
+		msg.splice(0, 1)
+		msg = msg.join(" ");
+		let options = msg.split(";").map(item => item.trim());
 		let d = 0;
 		for (let i = 0; i < options.length + d; i++) {
 			if (options[i - d] == "") {

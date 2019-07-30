@@ -9,7 +9,7 @@ class EchoCommand extends Command {
 		});
 	}
 	exec(message, args) {
-		return message.reply(args.message);
+		return message.channel.send(args.message);
 	}
 }
 
