@@ -4,11 +4,11 @@ const config = require("../config.js");
 class PlayCommand extends Command {
 	constructor(){
 		super(
-			"play",
+			"everyone",
 			{
-				aliases: ["play"],
+				aliases: ["everyone", "e"],
 				args: [{id: "message", type: "string", default: "", match: "content"}],
-				description: "Ping asking if people want to play.\n You can also add a custom message."
+				description: "Ping @everyone with a yes/no question.\n You can also add a custom message."
 			}
 		)
 	}
@@ -27,7 +27,7 @@ class PlayCommand extends Command {
 		} else {
 			start = message.member.nickname + ` (${name})`
 		}
-		let sent = await message.channel.send(`**${start}** asked: @here who wants to play${end}?`);
+		let sent = await message.channel.send(`**${start}** asked: @everyone ${end}?`);
 		message.delete();
 		await sent.react(config.yes_react)
 		sent.react(config.no_react);
