@@ -29,9 +29,8 @@ class PlayCommand extends Command {
 		}
 		let sent = await message.channel.send(`**${start}** asked: @here ${end}?`);
 		message.delete();
-		await sent.react(config.yes_react)
-		sent.react(config.no_react);
-		
+		await sent.react(config.yes_react);
+		await sent.react(config.no_react);		
 	}
 }
 
