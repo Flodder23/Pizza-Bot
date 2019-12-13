@@ -35,7 +35,7 @@ class PollCommand extends Command {
 				new Discord.RichEmbed()
 				.setColor(config.colour)
 				.setAuthor(nickname + " asked:", message.member.user.avatarURL)
-				.addField(question, options.map(item => item.join(" - "))))
+				.addField("⠀", [`**${question}**\n`, ...options.map(item => item.join(" - "))].join("\n")))
 			for (let i = 0; i < options.length; i++) {
 				await sent.react(config.emoji_letters[i]);
 			}
