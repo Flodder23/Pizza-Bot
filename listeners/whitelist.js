@@ -1,7 +1,7 @@
 const { Listener } = require("discord-akairo");
 const allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_".split("");
 
-class WelcomeListener extends Listener {
+class WhitelistListener extends Listener {
 	constructor() {
 		super(
 			"whitelist",
@@ -16,16 +16,15 @@ class WelcomeListener extends Listener {
 		if (message.author.id != this.client.user.id && message.channel.name == "whitelist") {
 			let ch_whitelist = message.channel;
 			let valid = true;
-			// let messages = await ch_whitelist.fetchMessages(100);
-			// for (let m of messages) {
-			// 	if (m[1].author.id == this.client.user.id) {
-			// 		await message.delete();
-			// 		valid = false;
-			// 		break
-			// 	}
-			// }
+			let messages = await ch_whitelist.fetchMessages(100);
+			for (let m of messages) {
+				if (m[1].author.id == this.client.user.id) {
+					await message.delete();
+					valid = false;
+					break
+				}
+			}
 			if (valid) {
-				console.log(valid)
 				let reply = await message.channel.send("Checking validity of username...")
 				for (let letter of message.content) {
 					if (!allowedChars.includes(letter)) {
@@ -92,4 +91,4 @@ class WelcomeListener extends Listener {
 	}
 }
 
-module.exports = WelcomeListener;
+module.exports = WhitelistListener;
