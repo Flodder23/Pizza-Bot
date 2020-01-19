@@ -1,5 +1,4 @@
 token.json
 node_modules/
 commands/debug.js
-whitelist.txt
-commands/whitelist.js
+listeners/whitelist.js
