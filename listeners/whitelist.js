@@ -13,7 +13,7 @@ class WhitelistListener extends Listener {
 	}
 
 	async exec(message) {
-		if (message.author.id != this.client.user.id && message.channel.name == "whitelist") {
+		if (!this.client.testMode && message.author.id != this.client.user.id && message.channel.name == "whitelist") {
 			let ch_whitelist = message.channel;
 			let valid = true;
 			let messages = await ch_whitelist.fetchMessages(100);

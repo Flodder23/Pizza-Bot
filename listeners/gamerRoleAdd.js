@@ -12,11 +12,13 @@ class gamerRoleAdd extends Listener {
 	}
 
 	exec(member) {
-		member.guild.roles.forEach(function(role) {
-			if (role.name == "Gamers") {
-				member.addRole(role);
+		if (!this.client.testMode) {
+			for (let role of member.guild.roles) {
+				if (role[1].name == "Gamers") {
+					member.addRole(role[1]);
+				}
 			}
-		});
+		}
 	}
 }
 
