@@ -1,5 +1,5 @@
 const { Listener } = require("discord-akairo");
-const checkValid = /([a-z]|[A-Z]|[0-9]|_)+/
+const checkValid = /^[0-9A-Za-z_]+$/
 
 class WhitelistListener extends Listener {
 	constructor() {
@@ -75,6 +75,7 @@ class WhitelistListener extends Listener {
 					}
 					else {
 						await reply.edit(`\`${message.content}\` is not a valid username.`)
+						valid = false;
 					}
 					if (!valid) {
 						await message.delete();
