@@ -13,9 +13,9 @@ class ReadyListener extends Listener {
 
 	async exec() {
 		if (this.client.testMode) {
-			console.log("Starting in testing mode.");
+			console.log("Started in testing mode.");
 		} else {
-			console.log("Starting in normal mode.");
+			console.log("Started in normal mode.");
 		}
 		for (let guild of this.client.guilds) {
 			if (this.client.testMode != (guild[1].name != "Lonely Joe")) {
