@@ -1,5 +1,4 @@
 const { Listener } = require("discord-akairo");
-const Discord = require("discord.js");
 
 class ReactRoleRemoveListener extends Listener {
 	constructor() {
@@ -13,7 +12,7 @@ class ReactRoleRemoveListener extends Listener {
 	}
 
 	async exec(messageReaction, user) {
-		if (!this.client.testMode) {
+		if (this.client.testMode != (messageReaction.message.guild.name != "Lonely Joe")) {
 			let message = messageReaction.message;
 			let bot_id = this.client.user.id;
 			if (message.author.id == this.client.user.id) {
@@ -25,7 +24,7 @@ class ReactRoleRemoveListener extends Listener {
 								member.removeRole(role[1]);
 							}
 						}
-					} 
+					}
 				}
 			}
 		}

@@ -1,7 +1,6 @@
 const { Listener } = require("discord-akairo");
-const Discord = require("discord.js");
 
-class roleRemoveWhitelistRemove extends Listener {
+class roleRemoveWhitelistRemoveListener extends Listener {
 	constructor() {
 		super(
 			"roleRemoveWhitelistRemove",
@@ -13,7 +12,7 @@ class roleRemoveWhitelistRemove extends Listener {
 	}
 
 	async exec(oldMember, newMember) {
-		if (!this.client.testMode) {
+		if (this.client.testMode != (oldMember.guild.name != "Lonely Joe")) {
 			for (let role of oldMember.roles) {
 				if (typeof newMember.roles.get(role[0]) == "undefined") {
 					if (role[1].name == "Minecraft") {
@@ -42,4 +41,4 @@ class roleRemoveWhitelistRemove extends Listener {
 	}
 }
 
-module.exports = roleRemoveWhitelistRemove;
+module.exports = roleRemoveWhitelistRemoveListener;

@@ -12,7 +12,7 @@ class ReactRoleAddListener extends Listener {
 	}
 
 	async exec(messageReaction, user) {
-		if (!this.client.testMode) {
+		if (this.client.testMode != (messageReaction.message.guild.name != "Lonely Joe")) {
 			let message = messageReaction.message;
 			if (message.author.id == this.client.user.id) {
 				if (message.channel.name == "server-info") {

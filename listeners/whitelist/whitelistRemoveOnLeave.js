@@ -1,5 +1,4 @@
 const { Listener } = require("discord-akairo");
-const Discord = require("discord.js");
 
 class WhitelistRemoveOnLeave extends Listener {
 	constructor() {
@@ -13,7 +12,7 @@ class WhitelistRemoveOnLeave extends Listener {
 	}
 
 	async exec(member) {
-		if (!this.client.testMode) {
+		if (!this.client.testMode || member.guild.name == "Lonely Joe") {
 			let ch_whitelist, ch_console;
 			for (let channel of member.guild.channels) {
 				if (channel[1].name == "whitelist") {

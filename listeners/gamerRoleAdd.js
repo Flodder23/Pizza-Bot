@@ -12,7 +12,7 @@ class gamerRoleAdd extends Listener {
 	}
 
 	exec(member) {
-		if (!this.client.testMode) {
+		if (this.client.testMode != (member.guild.name != "Lonely Joe")) {
 			for (let role of member.guild.roles) {
 				if (role[1].name == "Gamers") {
 					member.addRole(role[1]);
