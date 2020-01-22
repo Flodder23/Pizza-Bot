@@ -16,7 +16,9 @@ class ReadyListener extends Listener {
 			console.log("Starting in testing mode.");
 		} else {
 			console.log("Starting in normal mode.");
-			for (let guild of this.client.guilds) {
+		}
+		for (let guild of this.client.guilds) {
+			if (this.client.testMode != (guild[1].name != "Lonely Joe")) {
 				for (let channel of guild[1].channels) {
 					if (channel[1].name == "server-info") {
 						let messages = await channel[1].fetchMessages(100)
