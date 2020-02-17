@@ -12,26 +12,24 @@ class AskCommand extends Command {
 			}
 		)
 	}
-
 	async exec(message, args) {
 		let end;
 		if (args.message == ""){
-			end = ""
+			let rep = await message.reply("can't ask an empty question!")
+			await rep.delete(5000);
 		} else {
-			end = " " + args.message
+			let name = message.member.user.username + "#" + message.member.user.discriminator
+			let start;
+			if (message.member.nickname == null ) {
+				start = name
+			} else {
+				start = message.member.nickname + ` (${name})`
+			}
+			let sent = await message.channel.send(`**${start}** asked: ${args.message}`);
+			await sent.react(config.yes_react);
+			sent.react(config.no_react);
 		}
-
-		let name = message.member.user.username + "#" + message.member.user.discriminator
-		let start;
-		if (message.member.nickname == null ) {
-			start = name
-		} else {
-			start = message.member.nickname + ` (${name})`
-		}
-		let sent = await message.channel.send(`**${start}** asked: ${end}?`);
 		message.delete();
-		await sent.react(config.yes_react);
-		await sent.react(config.no_react);
 	}
 }
 
