@@ -20,7 +20,7 @@ class ReactRoleAddListener extends Listener {
 						let member = await message.guild.fetchMember(user.id);
 						let found_role = false;
 						for (let role of message.guild.roles) {
-							if (role[1].name == messageReaction.emoji.name){
+							if (role[1].name.replace(" ", "") == messageReaction.emoji.name){
 								member.addRole(role[1]);
 								found_role = true
 							}
