@@ -7,7 +7,7 @@ class RefreshWhitelistCommand extends Command {
 			description: "Adds every person on the whitelist in Discord to the Minecraft whitelist"
 		});
 	}
-	exec(message) {
+	async exec(message) {
 		let ch_whitelist, ch_console;
 		for (let channel of message.guild.channels) {
 			if (channel[1].name == "whitelist") {
