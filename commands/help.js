@@ -28,6 +28,7 @@ class HelpCommand extends Command {
 			message.channel.send(new Discord.RichEmbed()
 				.setColor(config.colour)
 				.setTitle("Help")
+				.setURL(`https://github.com/JosephLGibson/Pizza-Bot`)
 				.setDescription(`Type \`${this.handler.prefix()}help <command>\` for more information on a command.`)
 				.addField("Commands", `• ${cmds.map(item => item[0]).join("\n• ")}`, true)
 				.addField("Description", cmds.map(item => item[1]).join("\n"), true)
