@@ -20,7 +20,7 @@ class ReactRoleRemoveListener extends Listener {
 					if (message.content.startsWith("**ROLES**")) {
 						let member = await message.guild.fetchMember(user.id);
 						for (let role of message.guild.roles) {
-							if (role[1].name.replace(" ", "") == messageReaction.emoji.name){
+							if ((role[1].name.split(" ").join("")).toUpperCase() == messageReaction.emoji.name.toUpperCase()){
 								member.removeRole(role[1]);
 							}
 						}
