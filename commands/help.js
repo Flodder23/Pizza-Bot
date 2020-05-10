@@ -21,7 +21,7 @@ class HelpCommand extends Command {
 				.setURL(`https://github.com/JosephLGibson/Pizza-Bot/tree/master/commands/${args.command.id}.js`)
 				.addField("Aliases", ` - ${args.command.aliases.join("\n - ")}\n`)
 				.addField("Description", args.command.description + "\n")
-				.addField("Usage", `\`${this.client.commandHandler.prefix + args.command.id} <${args.command.args.map(item => item.id).join("> <")}>\``)
+				//.addField("Usage", `\`${this.client.commandHandler.prefix + args.command.id} <${args.command.args.map(item => item.id).join("> <")}>\``)
 			);
 		} else if (message.content.split(" ").length == 1) {
 			let cmds = [];
