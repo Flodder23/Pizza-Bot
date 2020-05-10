@@ -1,13 +1,24 @@
 const { Command } = require("discord-akairo");
 
+const commandInfo = {
+	id: "ping",
+	aliases: [],
+	args: [{id: "command", type: "commandAlias"}],
+	description: {
+		short: "Get the bot's ping.",
+		extend: "Gets time taken between the command being sent and the resulting \"pong\" message to be sent.",
+	}
+}
+
+commandInfo.aliases.unshift(commandInfo.id)
+commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
+commandInfo.description.args = commandInfo.args.map(item => item.id)
+
 class PingCommand extends Command {
 	constructor() {
 		super(
-			"ping",
-			{
-				aliases: ["ping"],
-				description: "Shows bot's ping.\nGets time taken between the command being sent and the resulting \"pong\" message to be sent."
-			}
+			commandInfo.id,
+			commandInfo
 		);
 	}
 

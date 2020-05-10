@@ -1,13 +1,27 @@
 const { Command } = require("discord-akairo");
 
+const commandInfo = {
+	id: "choose",
+	aliases: ["pick"],
+	args: [{id: "options", type: "string", match: "content"}],
+	description: {
+		short: "Chooses one of the given options for you.",
+		extend: "Options should be seperated by a semi-colon, like this: `option 1; option 2; option 3` etc.",
+	}
+}
+
+commandInfo.aliases.unshift(commandInfo.id)
+commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
+commandInfo.description.args = commandInfo.args.map(item => item.id)
+
 class ChooseCommand extends Command {
 	constructor() {
-		super("choose", {
-			aliases: ["choose", "pick"],
-			args: [{id: "options", type: "string", match: "content"}],
-			description: "Chooses one of the given options for you.\nOptions should be seperated by a semi-colon, like this: `option 1; option 2; option 3` etc."
-		})
+		super(
+			commandInfo.id,
+			commandInfo
+		);
 	}
+
 	exec(message, args) {
 		let options = args.options.split(";").map(item => item.trim());
 		let fillers = ["I choose... ", "I'd go for", "Fate has spoken... It has chosen", "What about", "The best option is", "Obviously"]

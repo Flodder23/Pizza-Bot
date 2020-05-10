@@ -1,12 +1,26 @@
 const { Command } = require("discord-akairo");
 const Discord = require("discord.js");
 
+const commandInfo = {
+	id: "avatar",
+	aliases: ["pic"],
+	args: [{id: "member", type: "member"}],
+	description: {
+		short: "Shows avatar of selected user.",
+		extend: "If no user is given, it shows the avatar of the user who called the command.",
+	}
+}
+
+commandInfo.aliases.unshift(commandInfo.id)
+commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
+commandInfo.description.args = commandInfo.args.map(item => item.id)
+
 class AvatarCommand extends Command {
 	constructor() {
-		super("avatar", {
-			aliases: ["avatar", "pic"],
-			args: [{id: "member", type: "member"}],
-			description: "Shows avatar of selected user.\nIf no user is given, it shows the avatar of the user who called the command."});
+		super(
+			commandInfo.id,
+			commandInfo
+		);
 	}
 
 	exec(message, args) {

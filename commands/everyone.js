@@ -1,17 +1,28 @@
 const { Command } = require("discord-akairo");
 const config = require("../config.js");
 
-class PlayCommand extends Command {
-	constructor(){
-		super(
-			"everyone",
-			{
-				aliases: ["everyone", "e"],
-				args: [{id: "message", type: "string", default: "", match: "content"}],
-				description: "Ping @everyone with a yes/no question.\n"
-			}
-		)
+const commandInfo = {
+	id: "everyone",
+	aliases: ["e"],
+	args: [{id: "message", type: "string", default: "", match: "content"}],
+	description: {
+		short: "Ping @everyone with a yes/no question.",
+		extend: ""
 	}
+}
+
+commandInfo.aliases.unshift(commandInfo.id)
+commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
+commandInfo.description.args = commandInfo.args.map(item => item.id)
+
+class EveryoneCommand extends Command {
+	constructor() {
+		super(
+			commandInfo.id,
+			commandInfo
+		);
+	}
+
 	async exec(message, args) {
 		let end;
 		if (args.message == ""){
@@ -35,4 +46,4 @@ class PlayCommand extends Command {
 	}
 }
 
-module.exports = PlayCommand;
+module.exports = EveryoneCommand;

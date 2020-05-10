@@ -1,11 +1,25 @@
 const { Command } = require("discord-akairo");
 
+const commandInfo = {
+	id: "rps",
+	aliases: ["rockpaperscissors"],
+	args: [{id: "choice", type: "string"}],
+	description: {
+		short: "Play Rock Paper Scissors.",
+		extend: "Replies with its choice and says who, if anyone, won.",
+	}
+}
+
+commandInfo.aliases.unshift(commandInfo.id)
+commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
+commandInfo.description.args = commandInfo.args.map(item => item.id)
+
 class rpsCommand extends Command {
 	constructor() {
-		super("rps", {
-			aliases: ["rps", "rockpaperscissors"],
-			args: [{id: "choice", type: "string"}],
-			description: "Play Rock Paper Scissors.\nReplies with its choice and says who, if anyone, won."});
+		super(
+			commandInfo.id,
+			commandInfo
+		);
 	}
 
 	exec(message, args) {

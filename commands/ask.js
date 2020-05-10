@@ -1,17 +1,28 @@
 const { Command } = require("discord-akairo");
 const config = require("../config.js");
 
+const commandInfo = {
+	id: "ask",
+	aliases: ["yesno"],
+	args: [{id: "message", type: "string", default: "", match: "content"}],
+	description: {
+		short: "Ask a yes/no question.",
+		extend: "",
+	}
+}
+
+commandInfo.aliases.unshift(commandInfo.id)
+commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
+commandInfo.description.args = commandInfo.args.map(item => item.id)
+
 class AskCommand extends Command {
 	constructor() {
 		super(
-			"ask", 
-			{
-				aliases: ["ask", "yesno"],
-				args: [{id: "message", type: "string", default: "", match: "content"}],
-				description: "Ask a yes/no question."
-			}
-		)
+			commandInfo.id,
+			commandInfo
+		);
 	}
+
 	async exec(message, args) {
 		let end;
 		if (args.message == ""){

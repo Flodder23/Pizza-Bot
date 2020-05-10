@@ -14,7 +14,7 @@ const commandInfo = {
 
 commandInfo.aliases.unshift(commandInfo.id)
 commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
-commandInfo.description.usage = `\`${config.prefix + commandInfo.id} <${commandInfo.args.map(item => item.id).join("> <")}>\``
+commandInfo.description.args = commandInfo.args.map(item => item.id)
 
 class HelpCommand extends Command {
 	constructor() {
@@ -24,7 +24,6 @@ class HelpCommand extends Command {
 		);
 	}
 	exec(message, args) {
-		console.log(args.command.filepath)
 		if (args.command) {
 			return message.channel.send(new Discord.MessageEmbed()
 				.setColor(config.colour)
@@ -32,12 +31,12 @@ class HelpCommand extends Command {
 				.setURL(`https://github.com/JosephLGibson/Pizza-Bot/tree/master/commands/${args.command.id}.js`)
 				.addField("Aliases", ` - ${args.command.aliases.join("\n - ")}\n`)
 				.addField("Description", args.command.description.long)
-				.addField("Usage", args.command.description.usage)
+				.addField("Usage", `\`${config.prefix + args.command.id} <${args.command.description.args.join("> <")}>\``)
 			);
 		} else if (message.content.split(" ").length == 1) {
 			let cmds = [];
 			for (let item of this.handler.modules) {
-				cmds.push([item[0], item[1].description.split("\n")[0]])
+				cmds.push([item[0], item[1].description.short])
 			}
 			return message.channel.send(new Discord.MessageEmbed()
 				.setColor(config.colour)
@@ -46,6 +45,7 @@ class HelpCommand extends Command {
 				.setDescription(`Type \`${this.client.commandHandler.prefix}help <command>\` for more information on a command.`)
 				.addField("Commands", `• ${cmds.map(item => item[0]).join("\n• ")}`, true)
 				.addField("Description", cmds.map(item => item[1]).join("\n"), true)
+				.addField("Roles", "React to the message in <#444896654986969089> to get a role.")
 			);
 		} else {
 			return message.reply("Sorry, couldn't find that command.")

@@ -2,14 +2,28 @@ const { Command } = require("discord-akairo");
 const Discord = require("discord.js");
 const config = require("../config.js");
 
+const commandInfo = {
+	id: "poll",
+	aliases: [],
+	args: [{id: "options", type: "string", match: "content"}],
+	description: {
+		short: "Creates a poll.",
+		extend: "The question and options should be seperated by a semi-colon, like this: `question; option 1; option 2; option 3` etc.",
+	}
+}
+
+commandInfo.aliases.unshift(commandInfo.id)
+commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
+commandInfo.description.args = commandInfo.args.map(item => item.id)
+
 class PollCommand extends Command {
 	constructor() {
-		super("poll", {
-			aliases: ["poll"],
-			args: [{id: "options", type: "string", match: "content"}],
-			description: "Creates a poll with the given options.\nOptions should be seperated by a semi-colon, like this: `question; option 1; option 2; option 3` etc."
-		});
+		super(
+			commandInfo.id,
+			commandInfo
+		);
 	}
+
 	async exec(message, args) {
 		let msg = message.cleanContent.split(" ")
 		msg.splice(0, 1)
@@ -34,7 +48,7 @@ class PollCommand extends Command {
 			let sent = await message.channel.send(
 				new Discord.MessageEmbed()
 				.setColor(config.colour)
-				.setAuthor(nickname + " asked:", message.author.avatarURL)
+				.setAuthor(nickname + " asked:", message.author.avatarURL())
 				.addField("⠀", [`**${question}**\n`, ...options.map(item => item.join(" - "))].join("\n")))
 			for (let i = 0; i < options.length; i++) {
 				await sent.react(config.emoji_letters[i]);

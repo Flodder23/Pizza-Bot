@@ -1,17 +1,28 @@
 const { Command } = require("discord-akairo");
 const config = require("../config.js");
 
-class PlayCommand extends Command {
-	constructor(){
-		super(
-			"here",
-			{
-				aliases: ["here", "h"],
-				args: [{id: "message", type: "string", default: "", match: "content"}],
-				description: "Ping @here with a yes/no question.\n"
-			}
-		)
+const commandInfo = {
+	id: "here",
+	aliases: ["h"],
+	args: [{id: "message", type: "string", default: "", match: "content"}],
+	description: {
+		short: "Ping @here with a yes/no question.",
+		extend: "",
 	}
+}
+
+commandInfo.aliases.unshift(commandInfo.id)
+commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
+commandInfo.description.args = commandInfo.args.map(item => item.id)
+
+class HereCommand extends Command {
+	constructor() {
+		super(
+			commandInfo.id,
+			commandInfo
+		);
+	}
+
 	async exec(message, args) {
 		let end;
 		if (args.message == ""){
@@ -35,4 +46,4 @@ class PlayCommand extends Command {
 	}
 }
 
-module.exports = PlayCommand;
+module.exports = HereCommand;
