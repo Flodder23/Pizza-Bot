@@ -1,3 +1,4 @@
 token.json
 node_modules/
 commands/debug.js
+package-lock.json
