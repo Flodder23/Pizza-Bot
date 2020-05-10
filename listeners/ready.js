@@ -1,4 +1,5 @@
 const { Listener } = require("discord-akairo");
+const Discord = require("discord.js");
 
 class ReadyListener extends Listener {
 	constructor() {
@@ -6,7 +7,7 @@ class ReadyListener extends Listener {
 			"ready",
 			{
 				emitter: "client",
-				eventName: "ready"
+				event: "ready"
 			}
 		);
 	}
@@ -17,11 +18,11 @@ class ReadyListener extends Listener {
 		} else {
 			console.log("Started in normal mode.");
 		}
-		for (let guild of this.client.guilds) {
+		for (let guild of this.client.guilds.cache) {
 			if (this.client.testMode != (guild[1].name != "Lonely Joe")) {
-				for (let channel of guild[1].channels) {
+				for (let channel of guild[1].channels.cache) {
 					if (channel[1].name == "server-info") {
-						let messages = await channel[1].fetchMessages(100)
+						let messages = await channel[1].messages.fetch({ limit: 100 })
 						for (let message of messages) {
 							if (message[1].content.startsWith("**ROLES**")) {
 								console.log(`Found roles message for ${guild[1].name}`);
@@ -31,6 +32,7 @@ class ReadyListener extends Listener {
 				}
 			}
 		}
+		console.log("Done.");
 	}
 }
 

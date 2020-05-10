@@ -6,7 +6,7 @@ class roleRemoveWhitelistRemoveListener extends Listener {
 			"roleRemoveWhitelistRemove",
 			{
 				emitter: "client",
-				eventName: "guildMemberUpdate"
+				event: "guildMemberUpdate"
 			}
 		);
 	}

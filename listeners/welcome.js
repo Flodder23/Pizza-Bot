@@ -6,7 +6,7 @@ class WelcomeListener extends Listener {
 			"welcome",
 			{
 				emitter: "client",
-				eventName: "guildMemberAdd"
+				event: "guildMemberAdd"
 			}
 		);
 	}

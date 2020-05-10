@@ -6,7 +6,7 @@ class ReactRoleAddListener extends Listener {
 			"reactRoleAdd",
 			{
 				emitter: "client",
-				eventName: "messageReactionAdd"
+				event: "messageReactionAdd"
 			}
 		);
 	}
@@ -17,11 +17,11 @@ class ReactRoleAddListener extends Listener {
 			if (message.author.id == this.client.user.id) {
 				if (message.channel.name == "server-info") {
 					if (message.content.startsWith("**ROLES**")) {
-						let member = await message.guild.fetchMember(user.id);
+						let member = await message.guild.members.fetch(user.id);
 						let found_role = false;
-						for (let role of message.guild.roles) {
+						for (let role of message.guild.roles.cache) {
 							if ((role[1].name.split(" ").join("")).toUpperCase() == messageReaction.emoji.name.toUpperCase()){
-								member.addRole(role[1]);
+								member.roles.add(role[1]);
 								found_role = true
 							}
 						}

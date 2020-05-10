@@ -7,7 +7,7 @@ class WhitelistListener extends Listener {
 			"whitelist",
 			{
 				emitter: "client",
-				eventName: "message"
+				event: "message"
 			}
 		);
 	}

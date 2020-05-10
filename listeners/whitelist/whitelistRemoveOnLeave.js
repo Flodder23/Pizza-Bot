@@ -6,7 +6,7 @@ class WhitelistRemoveOnLeave extends Listener {
 			"WhitelistRemoveOnLeave",
 			{
 				emitter: "client",
-				eventName: "guildMemberRemove"
+				event: "guildMemberRemove"
 			}
 		);
 	}

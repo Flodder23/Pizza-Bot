@@ -1,5 +1,4 @@
-const { AkairoClient } = require("discord-akairo");
-const Discord = require("discord.js");
+const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler } = require("discord-akairo");
 const config = require("./config.js");
 
 var token, prefix, testMode;
@@ -16,14 +15,43 @@ catch(error) {
 	testMode = false;
 }
 
-const client = new AkairoClient(
-	{
-	    ownerID: config.owner_id,
-	    prefix: prefix,
-	    commandDirectory: "./commands/",
-	    listenerDirectory: "./listeners/"
+class MyClient extends AkairoClient {
+	constructor() {
+		super({
+			ownerID: config.owner_id
+		});
+
+		this.commandHandler = new CommandHandler(
+			this,
+			{
+				directory: "./commands/",
+				prefix: prefix
+			}
+		);
+		this.inhibitorHandler = new InhibitorHandler(
+			this,
+			{
+				directory: "./inhibitors/"
+			}
+		);
+		this.listenerHandler = new ListenerHandler(
+			this,
+			{
+				directory: "./listeners/"
+			}
+		);
+
+		this.commandHandler.useListenerHandler(this.listenerHandler);
+		this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
+		
+		this.commandHandler.loadAll();
+		this.inhibitorHandler.loadAll();
+		this.listenerHandler.loadAll();
+		
 	}
-);
+}
+
+const client = new MyClient();
 
 client.testMode = testMode;
 

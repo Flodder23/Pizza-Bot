@@ -6,7 +6,7 @@ class ReactRoleRemoveListener extends Listener {
 			"reactRoleRemove",
 			{
 				emitter: "client",
-				eventName: "messageReactionRemove"
+				event: "messageReactionRemove"
 			}
 		);
 	}
@@ -18,10 +18,10 @@ class ReactRoleRemoveListener extends Listener {
 			if (message.author.id == this.client.user.id) {
 				if (message.channel.name == "server-info") {
 					if (message.content.startsWith("**ROLES**")) {
-						let member = await message.guild.fetchMember(user.id);
-						for (let role of message.guild.roles) {
+						let member = await message.guild.members.fetch(user.id);
+						for (let role of message.guild.roles.cache) {
 							if ((role[1].name.split(" ").join("")).toUpperCase() == messageReaction.emoji.name.toUpperCase()){
-								member.removeRole(role[1]);
+								member.roles.remove(role[1]);
 							}
 						}
 					}

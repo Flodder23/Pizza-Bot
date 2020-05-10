@@ -6,7 +6,7 @@ class gamerRoleAdd extends Listener {
 			"gamerRoleAdd",
 			{
 				emitter: "client",
-				eventName: "guildMemberAdd"
+				event: "guildMemberAdd"
 			}
 		);
 	}
@@ -15,7 +15,7 @@ class gamerRoleAdd extends Listener {
 		if (this.client.testMode != (member.guild.name != "Lonely Joe")) {
 			for (let role of member.guild.roles) {
 				if (role[1].name == "Gamers") {
-					member.addRole(role[1]);
+					member.roles.add(role[1]);
 				}
 			}
 		}
