@@ -2,26 +2,37 @@ const { Command } = require("discord-akairo");
 const Discord = require("discord.js");
 const config = require("../config.js");
 
+const commandInfo = {
+	id: "help",
+	aliases: ["info", "command"],
+	args: [{id: "command", type: "commandAlias"}],
+	description: {
+		short: "Shows help message.",
+		extend: "If no command is given it gives a general overview of all possible commands.",
+	}
+}
+
+commandInfo.aliases.unshift(commandInfo.id)
+commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
+commandInfo.description.usage = `\`${config.prefix + commandInfo.id} <${commandInfo.args.map(item => item.id).join("> <")}>\``
+
 class HelpCommand extends Command {
 	constructor() {
 		super(
-			"help",
-			{
-				aliases: ["help", "info", "command"],
-				args: [{id: "command", type: "commandAlias"}],
-				description: `Shows help message.\nIf no command is given it gives a general overview of all possible commands.`,
-			}
+			commandInfo.id,
+			commandInfo
 		);
 	}
 	exec(message, args) {
+		console.log(args.command.filepath)
 		if (args.command) {
 			return message.channel.send(new Discord.MessageEmbed()
 				.setColor(config.colour)
 				.setTitle(`**Help for ${args.command.id} command**`)
 				.setURL(`https://github.com/JosephLGibson/Pizza-Bot/tree/master/commands/${args.command.id}.js`)
 				.addField("Aliases", ` - ${args.command.aliases.join("\n - ")}\n`)
-				.addField("Description", args.command.description + "\n")
-				//.addField("Usage", `\`${this.client.commandHandler.prefix + args.command.id} <${args.command.args.map(item => item.id).join("> <")}>\``)
+				.addField("Description", args.command.description.long)
+				.addField("Usage", args.command.description.usage)
 			);
 		} else if (message.content.split(" ").length == 1) {
 			let cmds = [];
