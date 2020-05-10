@@ -1,17 +1,16 @@
 const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler } = require("discord-akairo");
 const config = require("./config.js");
 
-var token, prefix, testMode;
+let prefix = config.prefix;
+let token, testMode;
 try {
 	token = require("./token.json").key;
 	console.log("Starting using locally stored value for token...");
-	prefix = config.test_prefix;
 	testMode = true;
 }
 catch(error) {
 	token = process.env.TOKEN;
 	console.log("Starting using token stored on Heroku...");
-	prefix = config.main_prefix;
 	testMode = false;
 }
 
@@ -25,15 +24,16 @@ class MyClient extends AkairoClient {
 			this,
 			{
 				directory: "./commands/",
-				prefix: prefix
+				prefix: prefix,
+				allowMention: true
 			}
 		);
-/*		this.inhibitorHandler = new InhibitorHandler(
+		this.inhibitorHandler = new InhibitorHandler(
 			this,
 			{
 				directory: "./inhibitors/"
 			}
-		);*/
+		);
 		this.listenerHandler = new ListenerHandler(
 			this,
 			{
@@ -42,10 +42,10 @@ class MyClient extends AkairoClient {
 		);
 
 		this.commandHandler.useListenerHandler(this.listenerHandler);
-		//this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
+		this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
 		
 		this.commandHandler.loadAll();
-		//this.inhibitorHandler.loadAll();
+		this.inhibitorHandler.loadAll();
 		this.listenerHandler.loadAll();
 	}
 }

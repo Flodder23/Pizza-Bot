@@ -1,6 +1,5 @@
 module.exports = {
-	"test_prefix": "\\",
-	"main_prefix": "/",
+	"prefix": "/",
 	"colour": 16426522,
 	"owner_id": 286601488703291395,
 	"emoji_letters": [

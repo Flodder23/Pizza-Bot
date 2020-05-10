@@ -1,18 +1,19 @@
 const { Inhibitor } = require('discord-akairo');
 
-class testingInhibitor extends Inhibitor {
+class testingSeperatorInhibitor extends Inhibitor {
     constructor() {
         super(
-            "testing",
+            "testingSeperator",
             {
-                reason: 'blacklist'
+                reason: "blacklist",
+                type: "all"
             }
         )
     }
 
     exec(message) {
-        return (this.client.testMode == (message.channel.type="dm" || message.guild.name != "Lonely Joe"))
+        return (this.client.testMode != (message.channel.type == "dm" || message.guild.name == "Lonely Joe"))
     }
 }
 
-module.exports = testingInhibitor;
+module.exports = testingSeperatorInhibitor;
