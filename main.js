@@ -42,12 +42,11 @@ class MyClient extends AkairoClient {
 		);
 
 		this.commandHandler.useListenerHandler(this.listenerHandler);
-		this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
+		//this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
 		
 		this.commandHandler.loadAll();
 		//this.inhibitorHandler.loadAll();
 		this.listenerHandler.loadAll();
-		
 	}
 }
 

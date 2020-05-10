@@ -17,7 +17,7 @@ class WhitelistListener extends Listener {
 			if (message.author.id != this.client.user.id && message.channel.name == "whitelist") {
 				let ch_whitelist = message.channel;
 				let valid = true;
-				let messages = await ch_whitelist.fetchMessages(100);
+				let messages = await ch_whitelist.messages.fetch({ limit: 100 });
 				for (let m of messages) {
 					if (m[1].author.id == this.client.user.id) {
 						await message.delete();
@@ -30,7 +30,7 @@ class WhitelistListener extends Listener {
 					if (checkValid.test(message.content)) {
 						await reply.edit("Looking for console channel...")
 						let ch_console;
-						for (let ch of message.guild.channels) {
+						for (let ch of message.guild.channels.cache) {
 							if (ch[1].type == "text" && ch[1].name == "server-console") {
 								ch_console = ch[1];
 								break
@@ -43,7 +43,6 @@ class WhitelistListener extends Listener {
 						else {
 							await reply.edit("Searching whitelist for clashes...");
 							let to_remove;
-							let messages = await ch_whitelist.fetchMessages(100);
 							for (let m of messages) {
 								if (m[1].id != message.id) {
 									if (m[1].content == message.content) {
@@ -80,7 +79,7 @@ class WhitelistListener extends Listener {
 					if (!valid) {
 						await message.delete();
 					}
-					await reply.delete(5000);
+					await reply.delete({timeout: 5000});
 				}
 			}
 		}

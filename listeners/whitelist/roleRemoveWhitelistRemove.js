@@ -13,11 +13,11 @@ class roleRemoveWhitelistRemoveListener extends Listener {
 
 	async exec(oldMember, newMember) {
 		if (this.client.testMode != (oldMember.guild.name != "Lonely Joe")) {
-			for (let role of oldMember.roles) {
-				if (typeof newMember.roles.get(role[0]) == "undefined") {
+			for (let role of oldMember.roles.cache) {
+				if (typeof newMember.roles.cache.get(role[0]) == "undefined") {
 					if (role[1].name == "Minecraft") {
 						let ch_whitelist, ch_console;
-						for (let channel of newMember.guild.channels) {
+						for (let channel of newMember.guild.channels.cache) {
 							if (channel[1].name == "whitelist") {
 								ch_whitelist = channel[1];
 							} else if (channel[1].name == "server-console") {
@@ -25,7 +25,7 @@ class roleRemoveWhitelistRemoveListener extends Listener {
 							}
 						}
 						if (ch_whitelist && ch_console) {
-							let messages = await ch_whitelist.fetchMessages(100);
+							let messages = await ch_whitelist.messages.fetch({ limit: 100 })
 							for (let m of messages) {
 								if (m[1].author.id == newMember.id) {
 									await ch_console.send(`whitelist remove ${m[1].content}`)

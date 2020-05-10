@@ -32,7 +32,6 @@ class ReadyListener extends Listener {
 				}
 			}
 		}
-		console.log("Done.");
 	}
 }
 

@@ -14,7 +14,7 @@ class WhitelistRemoveOnLeave extends Listener {
 	async exec(member) {
 		if (!this.client.testMode || member.guild.name == "Lonely Joe") {
 			let ch_whitelist, ch_console;
-			for (let channel of member.guild.channels) {
+			for (let channel of member.guild.channels.cache) {
 				if (channel[1].name == "whitelist") {
 					ch_whitelist = channel[1];
 				} else if (channel[1].name == "server-console") {
@@ -23,7 +23,7 @@ class WhitelistRemoveOnLeave extends Listener {
 			}
 
 			if (ch_whitelist && ch_console) {
-				let messages = await ch_whitelist.fetchMessages(100);
+				let messages = await ch_whitelist.messages.fetch({ limit: 100 });
 				for (let m of messages) {
 					if (m[1].author.id == member.id) {
 						await ch_console.send(`whitelist remove ${m[1].content}`)
