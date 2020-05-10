@@ -24,22 +24,24 @@ class PollCommand extends Command {
 		}
 
 		if (3 <= options.length && options.length <= 20) {
-			let nickname = message.member.nickname
-			if (nickname == null) {nickname = message.member.user.username}
+			let nickname = message.author.nickname
+			if (nickname == null) {nickname = message.author.username}
 			let question = options.shift();
 			for (let i = 0; i < options.length; i++) {
 				options[i] = [config.emoji_letters[i], options[i]]
 			}
 
 			let sent = await message.channel.send(
-				new Discord.RichEmbed()
+				new Discord.MessageEmbed()
 				.setColor(config.colour)
-				.setAuthor(nickname + " asked:", message.member.user.avatarURL)
+				.setAuthor(nickname + " asked:", message.author.avatarURL)
 				.addField("⠀", [`**${question}**\n`, ...options.map(item => item.join(" - "))].join("\n")))
 			for (let i = 0; i < options.length; i++) {
 				await sent.react(config.emoji_letters[i]);
 			}
-			await message.delete();
+			if (message.channel.type != "dm") {
+				return await message.delete();
+			}
 		} else {
 			return message.reply("Something went wrong - options should be seperated by a semi-colon, like this: `question; option 1; option 2; option 3` etc. and there should be between 2 and 20 options.")
 		}

@@ -29,7 +29,9 @@ class AskCommand extends Command {
 			await sent.react(config.yes_react);
 			sent.react(config.no_react);
 		}
-		message.delete();
+		if (message.channel.type != "dm") {
+			return await message.delete();
+		}
 	}
 }
 

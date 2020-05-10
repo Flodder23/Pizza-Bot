@@ -12,7 +12,7 @@ class RoleCommand extends Command {
 	}
 
 	exec(message) {
-		for (let channel of message.guild.channels) {
+		for (let channel of message.guild.channels.cache) {
 			if (channel[1].name == "server-info") {
 				message.reply(`React to the message in ${channel[1]} to get a role.`);
 			}

@@ -18,18 +18,20 @@ class PlayCommand extends Command {
 			let rep = await message.reply("can't ask an empty question!")
 			await rep.delete(5000);
 		} else {
-			let name = message.member.user.username + "#" + message.member.user.discriminator
+			let name = message.author.username + "#" + message.author.discriminator
 			let start;
-			if (message.member.nickname == null ) {
+			if (message.author.nickname == null ) {
 				start = name
 			} else {
-				start = message.member.nickname + ` (${name})`
+				start = message.author.nickname + ` (${name})`
 			}
 			let sent = await message.channel.send(`**${start}** asked: @everyone ${args.message}`);
 			await sent.react(config.yes_react)
 			sent.react(config.no_react);
 		}
-		message.delete();
+		if (message.channel.type != "dm") {
+			return await message.delete();
+		}
 	}
 }
 

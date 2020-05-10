@@ -4,15 +4,18 @@ const config = require("../config.js");
 
 class HelpCommand extends Command {
 	constructor() {
-		super("help", {
-			aliases: ["help", "info", "command"],
-			args: [{id: "command", type: "commandAlias"}],
-			description: `Shows help message.\nIf no command is given it gives a general overview of all possible commands.`,
-		});
+		super(
+			"help",
+			{
+				aliases: ["help", "info", "command"],
+				args: [{id: "command", type: "commandAlias"}],
+				description: `Shows help message.\nIf no command is given it gives a general overview of all possible commands.`,
+			}
+		);
 	}
 	exec(message, args) {
 		if (args.command) {
-			message.channel.send(new Discord.MessageEmbed()
+			return message.channel.send(new Discord.MessageEmbed()
 				.setColor(config.colour)
 				.setTitle(`**Help for ${args.command.id} command**`)
 				.setURL(`https://github.com/JosephLGibson/Pizza-Bot/tree/master/commands/${args.command.id}.js`)
@@ -25,7 +28,7 @@ class HelpCommand extends Command {
 			for (let item of this.handler.modules) {
 				cmds.push([item[0], item[1].description.split("\n")[0]])
 			}
-			message.channel.send(new Discord.MessageEmbed()
+			return message.channel.send(new Discord.MessageEmbed()
 				.setColor(config.colour)
 				.setTitle("Help")
 				.setURL(`https://github.com/JosephLGibson/Pizza-Bot`)
@@ -34,7 +37,7 @@ class HelpCommand extends Command {
 				.addField("Description", cmds.map(item => item[1]).join("\n"), true)
 			);
 		} else {
-			message.reply("Sorry, couldn't find that command.")
+			return message.reply("Sorry, couldn't find that command.")
 		}
 	}
 }

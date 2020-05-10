@@ -12,9 +12,9 @@ class ReactRoleRemoveListener extends Listener {
 	}
 
 	async exec(messageReaction, user) {
-		if (this.client.testMode != (messageReaction.message.guild.name != "Lonely Joe")) {
-			let message = messageReaction.message;
-			let bot_id = this.client.user.id;
+		let message = messageReaction.message;
+		let bot_id = this.client.user.id;
+		if (message.channel.type != "dm" && this.client.testMode == (message.guild.name == "Lonely Joe")) {
 			if (message.author.id == this.client.user.id) {
 				if (message.channel.name == "server-info") {
 					if (message.content.startsWith("**ROLES**")) {

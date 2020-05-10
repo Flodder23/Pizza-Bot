@@ -18,12 +18,12 @@ class AvatarCommand extends Command {
 			desc = `Showing ${args.member}'s avatar:`;
 		}
 		if (args.member) {
-			message.channel.send(new Discord.RichEmbed()
+			return message.channel.send(new Discord.MessageEmbed()
 				.setDescription(desc)
 				.setColor(16426522)
-				.setImage(args.member.user.avatarURL));
+				.setImage(args.member.user.avatarURL()));
 		} else {
-			message.reply("Sorry, couldn't find that user.")
+			return message.reply("Sorry, couldn't find that user.")
 		}
 	}
 }
