@@ -12,7 +12,7 @@ class testingSeperatorInhibitor extends Inhibitor {
     }
 
     exec(message) {
-        return (this.client.testMode != (message.channel.type == "dm" || message.guild.name == "Lonely Joe"))
+        return !(message.channel.type == "dm" || this.client.testMode == (message.guild.name == "Lonely Joe"))
     }
 }
 
