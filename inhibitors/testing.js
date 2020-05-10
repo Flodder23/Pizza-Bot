@@ -11,7 +11,7 @@ class testingInhibitor extends Inhibitor {
     }
 
     exec(message) {
-        return (this.client.testMode == (message.member.guild.name != "Lonely Joe"))
+        return (this.client.testMode == (message.guild.name != "Lonely Joe"))
     }
 }
 
