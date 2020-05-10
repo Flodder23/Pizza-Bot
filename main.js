@@ -28,12 +28,12 @@ class MyClient extends AkairoClient {
 				prefix: prefix
 			}
 		);
-		this.inhibitorHandler = new InhibitorHandler(
+/*		this.inhibitorHandler = new InhibitorHandler(
 			this,
 			{
 				directory: "./inhibitors/"
 			}
-		);
+		);*/
 		this.listenerHandler = new ListenerHandler(
 			this,
 			{
@@ -45,7 +45,7 @@ class MyClient extends AkairoClient {
 		this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
 		
 		this.commandHandler.loadAll();
-		this.inhibitorHandler.loadAll();
+		//this.inhibitorHandler.loadAll();
 		this.listenerHandler.loadAll();
 		
 	}
