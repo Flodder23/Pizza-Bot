@@ -28,6 +28,9 @@ class ReadyListener extends Listener {
 								console.log(`Found roles message for ${guild[1].name}`);
 							}
 						}
+					} else if (channel[1].name == "whitelist") {
+						await channel[1].messages.fetch({ limit: 100 })
+						console.log(`Found whiteslist channel for ${guild[1].name}`);
 					}
 				}
 			}
