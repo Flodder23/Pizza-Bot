@@ -30,11 +30,20 @@ class ReadyListener extends Listener {
 						}
 					} else if (channel[1].name == "whitelist") {
 						await channel[1].messages.fetch({ limit: 100 })
-						console.log(`Found whiteslist channel for ${guild[1].name}`);
+						console.log(`Found whitelist channel for ${guild[1].name}`);
 					}
 				}
 			}
 		}
+		this.client.user.setPresence(
+			{
+				activity: {
+					name: "/help",
+					type: "LISTENING"
+				},
+				status: "online"
+			}
+		);
 	}
 }
 
