@@ -7,8 +7,8 @@
 		"start": "node main.js"
 	},
 	"dependencies": {
-		"discord.js": "12.2.0",
-		"discord-akairo": "8.0.0",
-		"wolfram-alpha-api": "https://products.wolframalpha.com/api/libraries/javascript/wolfram-alpha-api-1.0.0-rc.1.tgz"
+		"discord.js": "^12.2.0",
+		"discord-akairo": "^8.0.0",
+		"wolfram-alpha-api": "./wolfram-alpha-api"
 	}
 }
