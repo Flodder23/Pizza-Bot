@@ -1,15 +1,14 @@
 {
-    "name": "Pizza-Bot",
-    "description": "Bot for the Pizza server",
-    "version": "0.0.0",
-    "main": "main.js",
-    "scripts": {
-        "start": "node main.js"
-    },
-    "dependencies": {
-        "sqlite": "3.0.6",
-        "sequelize": "5.21.7",
-        "discord.js": "12.2.0",
-        "discord-akairo": "8.0.0"
-    }
+	"name": "Pizza-Bot",
+	"description": "Bot for the Pizza server",
+	"version": "0.0.0",
+	"main": "main.js",
+	"scripts": {
+		"start": "node main.js"
+	},
+	"dependencies": {
+		"discord.js": "12.2.0",
+		"discord-akairo": "8.0.0",
+		"wolfram-alpha-api": "https://products.wolframalpha.com/api/libraries/javascript/wolfram-alpha-api-1.0.0-rc.1.tgz"
+	}
 }
