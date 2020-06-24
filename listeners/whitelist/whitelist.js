@@ -46,7 +46,7 @@ class WhitelistListener extends Listener {
 							for (let m of messages) {
 								if (m[1].id != message.id) {
 									if (m[1].content == message.content) {
-										reply.edit(`${m[1].author.toString()} has already whitelisted \`${message.content}\`.`);
+										await reply.edit(`${m[1].author.toString()} has already whitelisted \`${message.content}\`.`);
 										valid = false
 										break
 									} else {
