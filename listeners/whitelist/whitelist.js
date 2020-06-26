@@ -59,7 +59,6 @@ class WhitelistListener extends Listener {
 							if (valid) {
 								if (typeof to_remove != "undefined") {
 									await reply.edit("Removing old username...");
-									await ch_console.send(`whitelist remove ${to_remove.content}`);
 									await to_remove.delete();
 								}
 								await reply.edit("Adding new username...");

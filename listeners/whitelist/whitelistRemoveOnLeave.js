@@ -26,7 +26,6 @@ class WhitelistRemoveOnLeave extends Listener {
 				let messages = await ch_whitelist.messages.fetch({ limit: 100 });
 				for (let m of messages) {
 					if (m[1].author.id == member.id) {
-						await ch_console.send(`whitelist remove ${m[1].content}`)
 						await m[1].delete()
 					}
 				}

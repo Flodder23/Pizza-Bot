@@ -21,8 +21,8 @@ class messageDeleteUsernameDeleteListener extends Listener {
 					for (let m of messageHistory) {
 						lastMessage = m[1]
 					}
-					let ignore  = false
-					if (lastMessage.author.id == this.client.user.id) {
+					let ignore = false
+					if (typeof lastMessage != "undefined" && lastMessage.author.id == this.client.user.id) {
 						if (/> has already whitelisted `/.test(lastMessage.content)) {
 							ignore = true
 						}
