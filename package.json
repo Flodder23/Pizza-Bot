@@ -9,6 +9,7 @@
 	"dependencies": {
 		"discord.js": "^12.2.0",
 		"discord-akairo": "^8.0.0",
-		"wolfram-alpha-api": "./wolfram-alpha-api"
+		"wolfram-alpha-api": "./wolfram-alpha-api",
+		"moment": "^2.27.0"
 	}
 }

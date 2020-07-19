@@ -45,6 +45,7 @@ class CalcCommand extends Command {
 							`${firstSubpod ? `**${pod.title}**` : ""}\n\`${subpod.plaintext}\``,
 							{
 								embed: {
+									color: 16426522,
 									image: {
 										url: subpod.img.src
 									}
