@@ -63,7 +63,7 @@ class ProfileCommand extends Command {
                     inline: true
                 }, {
                     name: "Nickname",
-                    value: member.nickname,
+                    value: ((member.nickname == null) ? "None" : member.nickname),
                     inline: true
                 }, {
                     name: "Date Registered",
@@ -81,10 +81,6 @@ class ProfileCommand extends Command {
                     name: "Roles",
                     value: roles.join("\n"),
                     inline: true
-                // }, {
-                //     name: "Joined",
-                //     value: `${since(member.joinedAt, 3)} ago.`,
-                //     inline: true
                 }
             ]
         }});
