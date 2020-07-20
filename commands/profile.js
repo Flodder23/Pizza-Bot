@@ -45,7 +45,7 @@ class ProfileCommand extends Command {
         }
 
         await message.channel.send({ embed: {
-            color: 16426522,
+            color: member.displayColor,
             thumbnail: {
                 url: member.user.avatarURL()
             },
@@ -77,6 +77,10 @@ class ProfileCommand extends Command {
                     name: "Join Rank",
                     value: joinRank,
                     inline: true
+                // }, {
+                //     name: "Last Message",
+                //     value: `[${moment(member.lastMessage.createdAt).format("DD MMM YY")}](${member.lastMessage.url})`,
+                //     inline: true
                 }, {
                     name: "Roles",
                     value: roles.join("\n"),
