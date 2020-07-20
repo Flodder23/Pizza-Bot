@@ -32,9 +32,9 @@ class ServerInfoCommand extends Command {
 		const isVerified = (guild.verified) ? "Yes" : "No"
 
 		message.channel.send({embed: {
-			author: guild.name,
-			thumbnail: {
-				url: guild.iconURL()
+			author: {
+				name: guild.name + " info",
+				icon_url: guild.iconURL()
 			},
 			color: 16426522,
 			footer: `ID: ${guild.id}`,
