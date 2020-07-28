@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const config = require("../config.js");
 
 async function getPing(str, guild) {
-	if (Discord.MessageMentions.ROLES_PATTERN.test(str) || Discord.MessageMentions.USERS_PATTERN.test(str)) {
+	if (str.match(/^<@(&|!?)\d{17,19}>$/)) {  // if it's already a ping
 		return str
 	}
 	if (str.match(/^@?((h(ere)?)|(e(veryone)?))$/i)) {
@@ -13,11 +13,7 @@ async function getPing(str, guild) {
 			return "@everyone"
 		}
 	}
-	// let member = await guild.members.fetch({query: str, limit: 1})
-	// if (member.array().length > 0) {
-	// 	console.log(member)
-	// 	return member.array()[0]
-	// }
+	if (!guild) {return null}
 	let members = guild.members.cache
 	for (let member of members) {
 		if (
@@ -47,7 +43,7 @@ const commandInfo = {
 	description: {
 		short: "Creates a poll.",
 		extend: `The pings, question and options should be seperated by a semi-colon, like this: \`ping1; ping2; ... ; question; option1; option2; ...\` etc.
-		The first argument that isn't resolved as a ping will be treated as the question and all arguments after will be the options
+		The first argument that can't be resolved as a ping will be treated as the question and all arguments after will be the options
 		When checking for a ping, it is first checked whether the string is already a ping, then whether it matches to a member, and finally whether it matches to a role.`
 	}
 }
@@ -66,10 +62,7 @@ class PollCommand extends Command {
 	}
 
 	async exec(message, args) {
-		let msg = message.content.split(" ")
-		msg.splice(0, 1)
-		msg = msg.join(" ");
-		let options = msg.split(";").map(item => item.trim()).filter(o => o != "");
+		let options = args.arguments.split(";").map(item => item.trim()).filter(o => o != "");
 
 		let question;
 		let pings = [];
@@ -100,10 +93,8 @@ class PollCommand extends Command {
 		for (let i = 0; i < options.length; i++) {
 			await sent.react(config.emoji_letters[i]);
 		}
-		if (message.channel.type != "dm") {
+		if (message.channel.type != "dm") {  // Leave message in DMs as this is likely being used for testing
 			return await message.delete();
-		} else {
-			return message.reply(`Something went wrong - type \`${config.prefix}help poll\` for help on using this command`)
 		}
 	}
 }
