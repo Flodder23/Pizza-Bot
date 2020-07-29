@@ -1,16 +1,17 @@
 const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler } = require("discord-akairo");
 const config = require("./config.js");
 
-let prefix = config.prefix;
-let token, testMode;
+let token, testMode, prefix;
 try {
 	token = require("./token.json").key;
 	console.log("Starting using locally stored value for token...");
+	prefix = config.testPrefix
 	testMode = true;
 }
 catch(error) {
 	token = process.env.TOKEN;
 	console.log("Starting using token stored on Heroku...");
+	prefix = config.prefix
 	testMode = false;
 }
 

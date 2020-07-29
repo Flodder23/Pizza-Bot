@@ -16,4 +16,4 @@ class testingSeperatorInhibitor extends Inhibitor {
     }
 }
 
-module.exports = testingSeperatorInhibitor;
+// module.exports = testingSeperatorInhibitor;
