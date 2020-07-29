@@ -93,7 +93,7 @@ class PollCommand extends Command {
 		for (let i = 0; i < options.length; i++) {
 			await sent.react(config.emoji_letters[i]);
 		}
-		if (message.channel.type != "dm") {  // Leave message in DMs as this is likely being used for testing
+		if (message.channel.type != "dm" && !this.client.testMode) {
 			return await message.delete();
 		}
 	}

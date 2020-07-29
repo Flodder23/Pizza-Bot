@@ -40,7 +40,7 @@ class HereCommand extends Command {
 			await sent.react(config.yes_react);
 			sent.react(config.no_react);
 		}
-		if (message.channel.type != "dm") {
+		if (message.channel.type != "dm" && !this.client.testMode) {
 			message.delete();
 		}
 	}
