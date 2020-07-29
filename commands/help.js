@@ -25,30 +25,50 @@ class HelpCommand extends Command {
 	}
 	exec(message, args) {
 		if (args.command) {
-			return message.channel.send(new Discord.MessageEmbed()
-				.setColor(config.colour)
-				.setTitle(`**Help for ${args.command.id} command**`)
-				.setURL(`https://github.com/JosephLGibson/Pizza-Bot/tree/master/commands/${args.command.id}.js`)
-				.addField("Aliases", ` - ${args.command.aliases.join("\n - ")}\n`)
-				.addField("Description", args.command.description.long)
-				.addField("Usage", `\`${config.prefix + args.command.id} <${args.command.description.args.join("> <")}>\``)
-			);
+			return message.channel.send({embed: {
+				color: config.colour,
+				title: `**Help for ${args.command.id} command**`,
+				url: `https://github.com/JosephLGibson/Pizza-Bot/tree/master/commands/${args.command.id}.js`,
+				fields: [
+					{
+						name: "Aliases",
+						value: ` - ${args.command.aliases.join("\n - ")}\n`
+					}, {
+						name: "Description",
+						value:args.command.description.long
+					}, {
+						name: "Usage",
+						value: `\`${this.client.commandHandler.prefix + args.command.id} <${args.command.description.args.join("> <")}>\``
+					}
+				]
+			}})
 		} else if (message.content.split(" ").length == 1) {
 			let cmds = [];
 			for (let item of this.handler.modules) {
 				cmds.push([item[0], item[1].description.short])
 			}
-			return message.channel.send(new Discord.MessageEmbed()
-				.setColor(config.colour)
-				.setTitle("Help")
-				.setURL(`https://github.com/JosephLGibson/Pizza-Bot`)
-				.setDescription(`Type \`${this.client.commandHandler.prefix}help <command>\` for more information on a command.`)
-				.addField("Commands", `• ${cmds.map(item => item[0]).join("\n• ")}`, true)
-				.addField("Description", cmds.map(item => item[1]).join("\n"), true)
-				.addField("Roles", "React to the message in <#444896654986969089> to get a role.")
-			);
+			return message.channel.send({embed: {
+				color: config.colour,
+				title: "Help",
+				url: `https://github.com/JosephLGibson/Pizza-Bot`,
+				description: `Type \`${this.client.commandHandler.prefix}help <command>\` for more information on a command.`,
+				fields: [
+					{
+						name: "Commands",
+						value: `• ${cmds.map(item => item[0]).join("\n• ")}`,
+						inline: true
+					}, {
+						name: "Description",
+						value: cmds.map(item => item[1]).join("\n"),
+						inline: true
+					}, {
+						name: "Roles",
+						value: "React to the message in <#444896654986969089> to get a role."
+					}
+				]
+			}})
 		} else {
-			return message.reply("Sorry, couldn't find that command.")
+			return message.reply(`Sorry, couldn't find that command. Type \`${this.client.commandHandler.prefix}help\` for a list of commands.`)
 		}
 	}
 }

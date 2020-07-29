@@ -68,7 +68,7 @@ class PollCommand extends Command {
 		let pings = [];
 		while (!question) {
 			if (options.length < 3) {
-				return await message.channel.send(`Not enough options - type \`${config.prefix}help poll\` for help on using this command`)
+				return await message.channel.send(`Not enough options - type \`${this.client.commandHandler.prefix}help poll\` for help on using this command`)
 			}
 			let ping = await getPing(options[0], message.guild)
 			if (ping) {
