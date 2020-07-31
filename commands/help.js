@@ -63,7 +63,7 @@ class HelpCommand extends Command {
 						inline: true
 					}, {
 						name: "Roles",
-						value: "React to the message in <#444896654986969089> to get a role."
+						value: `React to the message in ${message.guild.channels.cache.find(c => c.name == "server-info")} to get a role.`
 					}
 				]
 			}})

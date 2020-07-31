@@ -1,5 +1,5 @@
 const { Command } = require("discord-akairo");
-const WolframAlphaAPI = require('wolfram-alpha-api');
+const WolframAlphaAPI = require("wolfram-alpha-api");
 let waKey;
 try {
 	waKey = require("../waKey.json").key;
