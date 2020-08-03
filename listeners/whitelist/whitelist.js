@@ -15,49 +15,70 @@ class WhitelistListener extends Listener {
 	async exec(message) {
 		if (message.channel.type != "dm" && this.client.testMode == (message.guild.name == "Lonely Joe")) {
 			if (message.author.id != this.client.user.id && message.channel.name == "whitelist") {
-				let whitelist = await message.channel.messages.fetch({ limit: 100 })
-				whitelist = whitelist.filter(m => m.id != message.id)
-				if (whitelist.filter(m => m.author.id == this.client.user.id).size > 0) {
-					await message.delete({ reason: "Bot already dealing with another username whitelist request" })
-				} else {
-					let valid = false
-					let deleteReason = ""
+				let ch_whitelist = message.channel;
+				let valid = true;
+				let messages = await ch_whitelist.messages.fetch({ limit: 100 });
+				for (let m of messages) {
+					if (m[1].author.id == this.client.user.id) {
+						await message.delete();
+						valid = false;
+						break
+					}
+				}
+				if (valid) {
 					let reply = await message.channel.send("Checking validity of username...")
 					if (checkValid.test(message.content)) {
 						await reply.edit("Looking for console channel...")
-						let ch_console = message.guild.channels.cache.find(c => c.type == "text" && c.name == "server-console")
-						if (ch_console) {
-							await reply.edit("Searching whitelist for clashes...")
-							let duplicate = whitelist.find(u => u.content == message.content)
-							if (!duplicate) {
-								await reply.edit("Searching whitelist for already whitelisted usernames...")
-								let removed = []
-								for (let [, m] of whitelist.filter(u => u.author.id == message.author.id)) {
-									removed.push(m.content)
-									await m.delete({ reason: "New username added by user" })
-								}
-								await reply.edit("Adding new username...")
-								await ch_console.send(`whitelist add ${message.content}`)
-								await reply.edit(removed.map(u => `Removed \`${u}\` from the whitelist\n`).join("") + `Added\`${message.content}\`to the whitelist`)
-								valid = true
-							} else {
-								await reply.edit(`${duplicate.author} has already whitelisted \`${message.content}\`.`)
-								deleteReason = "Duplicate username"
+						let ch_console;
+						for (let ch of message.guild.channels.cache) {
+							if (ch[1].type == "text" && ch[1].name == "server-console") {
+								ch_console = ch[1];
+								break
 							}
 						}
+						if (typeof ch_console == "undefined") {
+							await reply.edit("Couldn't find the console channel");
+							valid = false
+						}
 						else {
-							await reply.edit("Couldn't find the console channel")
-							deleteReason = "Couldn't find the console channel"
+							await reply.edit("Searching whitelist for clashes...");
+							let to_remove;
+							for (let m of messages) {
+								if (m[1].id != message.id) {
+									if (m[1].content == message.content) {
+										await reply.edit(`${m[1].author.toString()} has already whitelisted \`${message.content}\`.`);
+										valid = false
+										break
+									} else {
+										if (m[1].author.id == message.author.id) {
+											to_remove = m[1];
+										}
+									}
+								}
+							}
+							if (valid) {
+								if (typeof to_remove != "undefined") {
+									await reply.edit("Removing old username...");
+									await to_remove.delete();
+								}
+								await reply.edit("Adding new username...");
+								await ch_console.send(`whitelist add ${message.content}`);
+								if (typeof to_remove == "undefined") {
+									await reply.edit(`Added \`${message.content}\` to the whitelist.`);
+								} else {
+									await reply.edit(`Removed \`${to_remove.content}\` from the whitelist.\nAdded \`${message.content}\` to the whitelist.`)
+								}
+							}
 						}
 					}
 					else {
 						await reply.edit(`\`${message.content}\` is not a valid username.`)
-						deleteReason = "Invalid username"
+						valid = false;
 					}
 					if (!valid) {
-						await message.delete({ reason: deleteReason })
+						await message.delete();
 					}
-					return await reply.delete({ timeout: 5000 })
+					await reply.delete({timeout: 5000});
 				}
 			}
 		}
