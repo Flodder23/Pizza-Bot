@@ -56,8 +56,8 @@ class PollCommand extends Command {
 				description: [`**${message.author}'s poll:**`, question, "", ...options.map(item => item.join(" - "))].join("\n")
 			}}
 		)
-		for (let i = 0; i < options.length; i++) {
-			await sent.react(config.emoji_letters[i]);
+		for (let o of options) {
+			await sent.react(o[0]);
 		}
 		if (message.channel.type != "dm" && !this.client.testMode) {
 			return await message.delete();

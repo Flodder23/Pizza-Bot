@@ -12,7 +12,7 @@ class roleRemoveWhitelistRemoveListener extends Listener {
 	}
 
 	async exec(oldMember, newMember) {
-		if (this.client.testMode != (oldMember.guild.name != "Lonely Joe")) {
+		if (this.client.testMode == (oldMember.guild.name == "Lonely Joe")) {
 			for (let role of oldMember.roles.cache) {
 				if (typeof newMember.roles.cache.get(role[0]) == "undefined") {
 					if (role[1].name == "Minecraft") {

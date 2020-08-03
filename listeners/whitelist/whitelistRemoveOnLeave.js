@@ -12,7 +12,7 @@ class WhitelistRemoveOnLeave extends Listener {
 	}
 
 	async exec(member) {
-		if (!this.client.testMode || member.guild.name == "Lonely Joe") {
+		if (!this.client.testMode == (member.guild.name == "Lonely Joe")) {
 			let ch_whitelist, ch_console;
 			for (let channel of member.guild.channels.cache) {
 				if (channel[1].name == "whitelist") {

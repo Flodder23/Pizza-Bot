@@ -36,13 +36,14 @@ class ProfileCommand extends Command {
         const memberList = await message.guild.members.fetch();
         const joinRank = memberList.filter(b => !b.user.bot)
             .sort((a, b) => b.joinedTimestamp - a.joinedTimestamp)
-            .keyArray().reverse().
-            indexOf(member.user.id) + 1;
+            .keyArray().reverse()
+            .indexOf(member.user.id) + 1;
 
-        let roles = []
-        for(let role of member.roles.cache) {
-            if (role[1].name != "@everyone") {roles.push(role[1])}
-        }
+        // let roles = []
+        // for(let [, role] of member.roles.cache) {
+        //     if (role.name != "@everyone") {roles.push(role)}
+        // }
+    	let roles = member.roles.cache.filter(r => r.name != "@everyone")
 
         await message.channel.send({ embed: {
             color: member.displayColor,
@@ -83,7 +84,7 @@ class ProfileCommand extends Command {
                 //     inline: true
                 }, {
                     name: "Roles",
-                    value: roles.join("\n"),
+                    value: roles.map(r => r.toString()).join("\n"),
                     inline: true
                 }
             ]

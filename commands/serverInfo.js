@@ -29,7 +29,6 @@ class ServerInfoCommand extends Command {
 		const guildMembers = await guild.members.fetch()
 		const membersSize = guildMembers.size;
 		const botsSize = guildMembers.filter(b => b.user.bot).size
-		const isVerified = (guild.verified) ? "Yes" : "No"
 
 		message.channel.send({embed: {
 			author: {
