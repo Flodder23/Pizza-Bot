@@ -1,7 +1,7 @@
-const { Command } = require("discord-akairo");
-const Discord = require("discord.js");
-const config = require("../config.js");
-const getPing = require("../functions.js").getPing;
+const { Command } = require("discord-akairo")
+const Discord = require("discord.js")
+const config = require("../config.js")
+const { getPing } = require("../functions.js")
 
 const commandInfo = {
 	id: "poll",
@@ -60,7 +60,7 @@ class PollCommand extends Command {
 			await sent.react(o[0]);
 		}
 		if (message.channel.type != "dm" && !this.client.testMode) {
-			return await message.delete();
+			return await message.delete()
 		}
 	}
 }

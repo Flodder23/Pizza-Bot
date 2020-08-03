@@ -1,4 +1,5 @@
 const { Listener } = require("discord-akairo");
+const { isRolesMessage } = require("../functions.js")
 
 class ReactRoleAddListener extends Listener {
 	constructor() {
@@ -13,22 +14,14 @@ class ReactRoleAddListener extends Listener {
 
 	async exec(messageReaction, user) {
 		let message = messageReaction.message;
+		let member = await messageReaction.message.guild.members.fetch(user)
 		if (message.channel.type != "dm" && this.client.testMode == (message.guild.name == "Lonely Joe")) {
-			if (message.author.id == this.client.user.id) {
-				if (message.channel.name == "server-info") {
-					if (message.content.startsWith("**ROLES**")) {
-						let member = await message.guild.members.fetch(user.id);
-						let found_role = false;
-						for (let role of message.guild.roles.cache) {
-							if ((role[1].name.split(" ").join("")).toUpperCase() == messageReaction.emoji.name.toUpperCase()){
-								member.roles.add(role[1]);
-								found_role = true
-							}
-						}
-						if (!found_role) {
-							messageReaction.remove(user);
-						}
-					} 
+			if (isRolesMessage(message, this.client.user.id)) {
+				let role = message.guild.roles.cache.find(r => r.name.replace(" ", "").toLowerCase() == messageReaction.emoji.name.toLowerCase())
+				if (role) {
+					return await member.roles.add(role)
+				} else {
+					return await messageReaction.remove(user)
 				}
 			}
 		}

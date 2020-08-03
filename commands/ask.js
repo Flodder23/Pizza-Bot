@@ -1,6 +1,6 @@
-const { Command } = require("discord-akairo");
-const config = require("../config.js");
-const getPing = require("../functions.js").getPing
+const { Command } = require("discord-akairo")
+const config = require("../config.js")
+const { getPing } = require("../functions.js")
 
 const commandInfo = {
 	id: "ask",
