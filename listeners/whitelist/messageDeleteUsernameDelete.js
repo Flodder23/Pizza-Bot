@@ -17,15 +17,9 @@ class messageDeleteUsernameDeleteListener extends Listener {
 			if (message.channel.name == "whitelist") {
 				if (message.author.id != this.client.user.id) {
 					if (checkValid.test(message.content)) {
-						let messageHistory = await message.channel.messages.fetch({ limit: 1 })
-						let lastMessage;
-						for (let m of messageHistory) {
-							lastMessage = m[1]
-						}
-						if (typeof lastMessage != "undefined" && lastMessage.author.id == this.client.user.id) {
-							if (!lastMessage.content.includes("> has already whitelisted `")) {
-								return await message.guild.channels.cache.find(c => c.name == "server-console").send(`shitelist remove ${message.content}`)
-							}
+						let messageHistory = await message.channel.messages.fetch({ limit: 1, after: message.id })
+						if (messageHistory.filter(m => m.author.id == this.client.user.id && m.content.includes(`> has already whitelisted \`${message.content}\`.`)).size == 0) {
+							return await message.guild.channels.cache.find(c => c.name == "server-console").send(`whitelist remove ${message.content}`)
 						}
 					}
 				}
