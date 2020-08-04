@@ -12,9 +12,9 @@ class DMOnErrorListener extends Listener {
 	}
 
 	async exec(error, message, command) {
-		if (this.client.ownerUser) {
-			let path = error.stack.split("\n")[1].split("Pizza-Bot").pop()
-			let lineNumber = path.split(".js").pop().split(":")[1]
+		if (this.client.ownerUser && !this.client.testMode) {
+			let path = error.stack.split("\n")[1].split("/app/").pop()
+			let lineNumber = path.split(".js:").pop().split(":")[0]
 			path = path.split(".js:")[0] + ".js#L" + lineNumber
 			return await this.client.ownerUser.send({embed: {
 				title: "Error",
@@ -30,6 +30,8 @@ class DMOnErrorListener extends Listener {
 				],
 				timestamp: new Date(),
 			}})
+		} else {
+			console.log(error.stack)
 		}
 	}
 }
