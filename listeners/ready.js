@@ -1,6 +1,7 @@
 const { Listener } = require("discord-akairo");
 const Discord = require("discord.js");
 const { isRolesMessage } = require("../functions.js")
+const config = require("../config.js")
 
 class ReadyListener extends Listener {
 	constructor() {
@@ -14,24 +15,36 @@ class ReadyListener extends Listener {
 	}
 
 	async exec() {
+		let output = ""
 		if (this.client.testMode) {
-			console.log("Started in testing mode.");
+			output += "Started in testing mode\n"
 		} else {
-			console.log("Started in normal mode.");
+			output += "Started in normal mode\n"
 		}
 		for (let [, guild] of this.client.guilds.cache.filter(g => this.client.testMode != (g.name != "Lonely Joe"))) {
 			let ch_server_info = guild.channels.cache.find(c => c.name == "server-info")
 			if (ch_server_info) {
 				let messages = await ch_server_info.messages.fetch({ limit: 100 })
 				if (messages.some(m => m.content.startsWith("**ROLES**"))) {
-					console.log(`Found roles message for ${guild.name}`);
+					output += `Found roles message for ${guild.name}\n`
 				}
 			}
 			if (guild.channels.cache.some(g => g.name == "whitelist")) {
-				console.log(`Found whitelist channel for ${guild.name}`)
+				output += `Found whitelist channel for ${guild.name}\n`
+			}
+			if (!this.client.ownerUser) {
+				let ownerMember = await guild.members.cache.find(m => m.id == this.client.ownerID)
+				if (ownerMember) {
+					this.client.ownerUser = ownerMember.user
+				}
 			}
 		}
-		this.client.user.setPresence(
+		if (this.client.ownerUser) {
+			output += "Found owner user"
+		} else {
+			output += "Unable to find owner user"
+		}
+		await this.client.user.setPresence(
 			{
 				activity: {
 					name: "/help",
@@ -39,7 +52,19 @@ class ReadyListener extends Listener {
 				},
 				status: "online"
 			}
-		);
+		)
+		if (this.client.testMode) {
+			console.log(output)
+		} else {
+			if (this.client.ownerUser) {
+				await this.client.ownerUser.send({embed:{
+					title: "Bot Restarted",
+					description: output,
+					color: config.colour,
+					timestamp: new Date()
+				}})
+			} else {console.log(output)}
+		}
 	}
 }
 
