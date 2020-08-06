@@ -32,18 +32,8 @@ class ReadyListener extends Listener {
 			if (guild.channels.cache.some(g => g.name == "whitelist")) {
 				output += `Found whitelist channel for ${guild.name}\n`
 			}
-			if (!this.client.ownerUser) {
-				let ownerMember = await guild.members.cache.find(m => m.id == this.client.ownerID)
-				if (ownerMember) {
-					this.client.ownerUser = ownerMember.user
-				}
-			}
 		}
-		if (this.client.ownerUser) {
-			output += "Found owner user"
-		} else {
-			output += "Unable to find owner user"
-		}
+		output = output.trim()
 		await this.client.user.setPresence(
 			{
 				activity: {
