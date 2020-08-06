@@ -16,6 +16,7 @@ class ReadyListener extends Listener {
 
 	async exec() {
 		let output = ""
+		let ownerUser;
 		if (this.client.testMode) {
 			output += "Started in testing mode\n"
 		} else {
@@ -32,6 +33,12 @@ class ReadyListener extends Listener {
 			if (guild.channels.cache.some(g => g.name == "whitelist")) {
 				output += `Found whitelist channel for ${guild.name}\n`
 			}
+			if (!ownerUser) {
+				let ownerMember = await guild.members.cache.find(m => m.id == this.client.ownerID)
+				if (ownerMember) {
+					ownerUser = ownerMember.user
+				}
+			}
 		}
 		output = output.trim()
 		await this.client.user.setPresence(
@@ -44,16 +51,18 @@ class ReadyListener extends Listener {
 			}
 		)
 		if (this.client.testMode) {
-			console.log(output)
+			return console.log(output)
 		} else {
-			if (this.client.ownerUser) {
-				await this.client.ownerUser.send({embed:{
+			if (ownerUser) {
+				return await ownerUser.send({embed:{
 					title: "Bot Restarted",
 					description: output,
 					color: config.colour,
 					timestamp: new Date()
 				}})
-			} else {console.log(output)}
+			} else {
+				return console.log(output)
+			}
 		}
 	}
 }

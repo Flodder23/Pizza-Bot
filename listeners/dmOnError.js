@@ -21,14 +21,14 @@ class DMOnErrorListener extends Listener {
 			} else if (message.channel.type == "text") {
 				let owner = message.channel.members.find(m => m.id == this.client.ownerID)
 				if (owner) {
-					errorChannel = await owner.user.createDM()
+					errorChannel = owner.user
 				}
 			}
 			if (errorChannel) {
 				let path = error.stack.split("\n")[1].split("/app/").pop()
 				let lineNumber = path.split(".js:").pop().split(":")[0]
 				path = path.split(".js:")[0] + ".js#L" + lineNumber
-				return await errorChannel.send({embed: {
+				errorChannel.send({embed: {
 					title: "Error",
 					description: `\`\`\`js\n${error.stack}\`\`\``,
 					fields: [
@@ -42,10 +42,10 @@ class DMOnErrorListener extends Listener {
 					],
 					timestamp: new Date(),
 				}})
-			} else {
-				console.log(error.stack)
+				console.log(`Message:\n${message.content}\n`)
 			}
 		}
+		return console.log("Error:\n" + error.stack)
 	}
 }
 
