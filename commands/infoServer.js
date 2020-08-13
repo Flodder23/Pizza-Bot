@@ -4,11 +4,11 @@ const moment = require("moment")
 
 
 const commandInfo = {
-	id: "serverInfo",
-	aliases: [],
+	id: "infoServer",
+	aliases: ["serverInfo"],
 	args: [],
 	description: {
-		short: "Views the information about the server.",
+		short: "Shows information about the server.",
 		extend: ""
 	}
 }
@@ -17,7 +17,7 @@ commandInfo.aliases.unshift(commandInfo.id)
 commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
 commandInfo.description.args = commandInfo.args.map(item => item.id)
 
-class ServerInfoCommand extends Command {
+class InfoServerCommand extends Command {
 	constructor() {
 		super(
 			commandInfo.id,
@@ -92,4 +92,4 @@ class ServerInfoCommand extends Command {
 	}
 }
 
-module.exports = ServerInfoCommand;
+module.exports = InfoServerCommand;

@@ -2,11 +2,11 @@ const { Command } = require("discord-akairo");
 const moment = require("moment")
 
 const commandInfo = {
-    id: "profile",
-    aliases: [],
+    id: "infoUser",
+    aliases: ["userInfo", "infoMember", "memberInfo"],
     args: [{id: "member", type: "member"}],
     description: {
-        short: "View the profile of a user for the server.",
+        short: "Shows information about the given user/member",
         extend: "if no user is given, it will display your own."
     }
 }
@@ -15,7 +15,7 @@ commandInfo.aliases.unshift(commandInfo.id)
 commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
 commandInfo.description.args = commandInfo.args.map(item => item.id)
 
-class ProfileCommand extends Command {
+class InfoUserCommand extends Command {
     constructor() {
         super(
             commandInfo.id,
@@ -39,10 +39,6 @@ class ProfileCommand extends Command {
             .keyArray().reverse()
             .indexOf(member.user.id) + 1;
 
-        // let roles = []
-        // for(let [, role] of member.roles.cache) {
-        //     if (role.name != "@everyone") {roles.push(role)}
-        // }
     	let roles = member.roles.cache.filter(r => r.name != "@everyone")
 
         await message.channel.send({ embed: {
@@ -92,4 +88,4 @@ class ProfileCommand extends Command {
     }
 }
 
-module.exports = ProfileCommand
+module.exports = InfoUserCommand
