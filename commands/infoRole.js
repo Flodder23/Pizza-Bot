@@ -3,7 +3,7 @@ const moment = require("moment")
 
 const commandInfo = {
     id: "infoRole",
-    aliases: ["userRole"],
+    aliases: ["roleInfo"],
     args: [{id: "role", type: "role"}],
     description: {
         short: "Shows information about the given role.",
