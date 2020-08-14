@@ -41,7 +41,30 @@ class ReadyListener extends Listener {
 			}
 		}
 		output = output.trim()
-		await this.client.user.setPresence(
+		if (this.client.testMode) {
+			console.log(output)
+		} else {
+			if (ownerUser) {
+				await ownerUser.send({embed:{
+					title: "Bot Restarted",
+					description: output,
+					color: config.colour,
+					fields: [
+						{
+							name: "Release Info",
+							value: `[Commit](https://github.com/JosephLGibson/Pizza-Bot/commit/${process.env.HEROKU_SLUG_COMMIT})
+							**Release Version**: ${process.env.HEROKU_RELEASE_VERSION}
+							**Released on**: ${process.env.HEROKU_RELEASE_CREATED_AT}
+							**Deploy Description**: ${process.env.HEROKU_SLUG_DESCRIPTION}`
+						}
+					],
+					timestamp: new Date()
+				}})
+			} else {
+				console.log(output)
+			}
+		}
+		return await this.client.user.setPresence(
 			{
 				activity: {
 					name: "/help",
@@ -50,20 +73,6 @@ class ReadyListener extends Listener {
 				status: "online"
 			}
 		)
-		if (this.client.testMode) {
-			return console.log(output)
-		} else {
-			if (ownerUser) {
-				return await ownerUser.send({embed:{
-					title: "Bot Restarted",
-					description: output,
-					color: config.colour,
-					timestamp: new Date()
-				}})
-			} else {
-				return console.log(output)
-			}
-		}
 	}
 }
 
