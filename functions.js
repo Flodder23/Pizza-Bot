@@ -34,5 +34,27 @@ module.exports = {
 	},
 	isRolesMessage: function (message, clientID) {
 		return (message.content.startsWith("**ROLES**") && message.channel.name == "server-info" && message.author.id == clientID)
+	},
+	linkToMessage: function (link, guild) {
+		link = link.split("/")
+		if (link.length < 3) {
+			return "Invalid link."
+		}
+		let [guildID, channelID, messageID] = link.slice(start=link.length - 3)
+		if (guildID == guild.id) {
+			let channel = guild.channels.resolve(channelID)
+			if (channel) {
+				let message = channel.messages.resolve(messageID)
+				if (message) {
+					return message
+				} else {
+					return "Message not found."
+				}
+			} else {
+				return "Channel not found."
+			}
+		} else {
+			return "Server ID does not match."
+		}
 	}
 }
