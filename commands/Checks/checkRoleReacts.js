@@ -51,15 +51,15 @@ class CheckRoleReactsCommand extends Command {
 		for (let [, react] of roleMessage.reactions.cache) {
 			let role = message.guild.roles.cache.find(role => role.name.replace(" ", "").toLowerCase() == react.emoji.name.toLowerCase())
 			if (role) {
-				for (let [, u] of await react.users.fetch({ limit: 150 })) {
-					try {
-						let member = await message.guild.members.cache.find(m => m.id == u.id)
+				for (let [, u] of await react.users.fetch()) {
+					let member = message.guild.members.cache.find(m => m.id == u.id)
+					if (member) {
 						if (member.roles.cache.some(r => r.id == role.id)) {
 							valid ++;
 						} else {
 							memberWithoutRole ++;
 						}
-					} catch (error) {
+					} else {
 						leftMembers ++;
 					}
 				}
