@@ -61,7 +61,6 @@ class CheckRoleMessageCommand extends Command {
 				return await message.channel.send({ embed: { description: `Warning - multiple role messages found. ${roleMessages.map(m => `[goto](${m.url})`).join(" ")}` } })
 			}
 		}
-
 	}
 }
 
