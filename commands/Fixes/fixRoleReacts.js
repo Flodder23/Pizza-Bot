@@ -48,6 +48,7 @@ class FixRoleReactsCommand extends Command {
 		let valid = 0,				// The react was valid
 			memberWithoutRole = 0,	// The member who reacted does not have the role 
 			leftMembers = 0,		// The member has left
+			reactWithoutBot = 0,	// The bot has not done this valid reaction
 			reactWithoutRole = 0;	// The react does not have an asssociated role
 		for (let [, react] of roleMessage.reactions.cache) {
 			let role = message.guild.roles.cache.find(role => role.name.replace(" ", "").toLowerCase() == react.emoji.name.toLowerCase())
@@ -66,6 +67,10 @@ class FixRoleReactsCommand extends Command {
 						await react.users.remove(u)
 					}
 				}
+				if (!react.me) {
+					reactWithoutBot ++;
+					await roleMessage.react(react.emoji)
+				}
 			} else {
 				reactWithoutRole += react.count
 				await react.remove()
@@ -76,8 +81,9 @@ class FixRoleReactsCommand extends Command {
 			description:`Fixed based on [this message](${roleMessage.url})
 			\`${valid}\` valid reacts
 			\`${memberWithoutRole}\` roles added to member who had reacted
-			\`${leftMembers}\` reactions from users no longer in server removed
-			\`${reactWithoutRole}\` reactions without an associated role removed
+			\`${leftMembers}\` reacts from users no longer in server removed
+			\`${reactWithoutBot}\` reacts added by bot
+			\`${reactWithoutRole}\` reacts without an associated role removed
 			
 			Wrong message found? Run the \`checkRoleMessage\` command for help.`,
 		}})

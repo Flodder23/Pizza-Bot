@@ -47,6 +47,7 @@ class CheckRoleReactsCommand extends Command {
 		let valid = 0,				// The react was valid
 			memberWithoutRole = 0,	// The member who reacted does not have the role 
 			leftMembers = 0,		// The member has left
+			reactWithoutBot = 0,	// The bot has not done this valid reaction
 			reactWithoutRole = 0;	// The react does not have an asssociated role
 		for (let [, react] of roleMessage.reactions.cache) {
 			let role = message.guild.roles.cache.find(role => role.name.replace(" ", "").toLowerCase() == react.emoji.name.toLowerCase())
@@ -63,6 +64,9 @@ class CheckRoleReactsCommand extends Command {
 						leftMembers ++;
 					}
 				}
+				if (!react.me) {
+					reactWithoutBot ++;
+				}
 			} else {
 				reactWithoutRole ++;
 			}
@@ -71,9 +75,10 @@ class CheckRoleReactsCommand extends Command {
 			title: "Role react check results",
 			description:`Checked [this message](${roleMessage.url})
 			\`${valid}\` valid reacts
-			\`${memberWithoutRole}\` reactions are from users who don't have the associated role
+			\`${memberWithoutRole}\` reacts are from users who don't have the associated role
 			\`${leftMembers}\` reactions are from users who are no longer in the server
-			\`${reactWithoutRole}\` reactions don't have an associated role
+			\`${reactWithoutBot}\` are valid reactions that the bot hasn't reacted with
+			\`${reactWithoutRole}\` reacts don't have an associated role
 			
 			Wrong message found? Run the \`checkRoleMessage\` command for help.`,
 		}})
