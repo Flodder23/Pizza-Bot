@@ -39,6 +39,9 @@ class HelpCommand extends Command {
 					}, {
 						name: "Usage",
 						value: `\`${this.client.commandHandler.prefix + args.command.id} <${args.command.description.args.join("> <")}>\``
+					}, {
+						name: "Permissions needed to use",
+						value: args.command.userPermissions ? args.command.userPermissions.map(p => p.toLowerCase().replace("_", " ")).join(", ") : "None"
 					}
 				]
 			}})
