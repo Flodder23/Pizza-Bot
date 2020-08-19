@@ -2,20 +2,21 @@ const { Command } = require("discord-akairo")
 const { isRolesMessage, linkToMessage } = require("../../functions.js")
 
 const commandInfo = {
-	id: "checkRoleReacts",
+	id: "fixReactsForRole",
 	aliases: [],
 	args: [{id: "messageLink", type: "string"}],
 	description: {
-		short: "Checks that all reacts on the given roles message are from users with the corresponding role.",
-		extend: "If no link to a message is given, the bot will try to find it itself.",
-	}
+		short: "Gives role to every meeber who has reacted but does not have role",
+		extend: "Also removes reacts from users no longer in the server",
+	},
+	userPermissions: ["MANAGE_ROLES", "MANAGE_MESSAGES"]
 }
 
 commandInfo.aliases.unshift(commandInfo.id)
 commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
 commandInfo.description.args = commandInfo.args.map(item => item.id)
 
-class CheckRoleReactsCommand extends Command {
+class FixReactsForRoleCommand extends Command {
 	constructor() {
 		super(
 			commandInfo.id,
@@ -62,26 +63,30 @@ class CheckRoleReactsCommand extends Command {
 							valid ++;
 						} else {
 							memberWithoutRole ++;
+							await member.roles.add(role)
 						}
 					} else {
 						leftMembers ++;
+						await react.users.remove(u)
 					}
 				}
 				if (!react.me) {
 					reactWithoutBot ++;
+					await roleMessage.react(react.emoji)
 				}
 			} else {
-				reactWithoutRole ++;
+				reactWithoutRole += react.count
+				await react.remove()
 			}
 		}
 		return await message.channel.send({ embed: {
-			title: "Role react check results",
-			description:`Checked [this message](${roleMessage.url})
+			title: "Role react fix results",
+			description:`Fixed based on [this message](${roleMessage.url})
 			\`${valid}\` valid reacts
-			\`${memberWithoutRole}\` reacts are from users who don't have the associated role
-			\`${leftMembers}\` reactions are from users who are no longer in the server
-			\`${reactWithoutBot}\` are valid reactions that the bot hasn't reacted with
-			\`${reactWithoutRole}\` reacts don't have an associated role
+			\`${memberWithoutRole}\` roles added to member who had reacted
+			\`${leftMembers}\` reacts from users no longer in server removed
+			\`${reactWithoutBot}\` reacts added by bot
+			\`${reactWithoutRole}\` reacts without an associated role removed
 			
 			Wrong message found? Run the \`checkRoleMessage\` command for help.`,
 		}})
@@ -89,4 +94,4 @@ class CheckRoleReactsCommand extends Command {
 }
 
 
-module.exports = CheckRoleReactsCommand;
+module.exports = FixReactsForRoleCommand;
