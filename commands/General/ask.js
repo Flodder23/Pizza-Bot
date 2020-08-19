@@ -1,6 +1,7 @@
 const { Command } = require("discord-akairo")
 const config = require("../../config.js")
 const { getPing } = require("../../functions.js")
+const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "ask",
@@ -9,7 +10,8 @@ const commandInfo = {
 	description: {
 		short: "Ask a yes/no question.",
 		extend: "Use the `here`/`h` or `everyone`/`e` aliases to ping that role as well.\nYou can also ping other roles/users - seperate your pings with a semi-colon (`;`) before the question, like this: `ping1; ping2;...;question`",
-	}
+	},
+	category: category
 }
 
 commandInfo.aliases.unshift(commandInfo.id)

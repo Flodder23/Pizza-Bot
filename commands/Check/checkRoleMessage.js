@@ -1,5 +1,6 @@
 const { Command } = require("discord-akairo")
 const { linkToMessage } = require("../../functions.js")
+const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "checkRoleMessage",
@@ -8,7 +9,8 @@ const commandInfo = {
 	description: {
 		short: "Checks that the bot can find & see the react message in this server",
 		extend: "If no link to a message is given, the bot will try to find it itself.\nTo get the link to a message, right-click on it (or click the 3 dots at the top-right of the message) and click `Copy Message Link`",
-	}
+	},
+	category: category
 }
 
 commandInfo.aliases.unshift(commandInfo.id)

@@ -2,6 +2,7 @@ const { Command } = require("discord-akairo")
 const Discord = require("discord.js")
 const config = require("../../config.js")
 const { getPing } = require("../../functions.js")
+const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "poll",
@@ -12,7 +13,8 @@ const commandInfo = {
 		extend: `The pings, question and options should be seperated by a semi-colon, like this: \`ping1; ping2; ... ; question; option1; option2; ...\` etc.
 		The first argument that can't be resolved as a ping will be treated as the question and all arguments after will be the options
 		When checking for a ping, it is first checked whether the string is already a ping, then whether it matches to a member, and finally whether it matches to a role.`
-	}
+	},
+	category: category
 }
 
 

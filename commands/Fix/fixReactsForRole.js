@@ -1,5 +1,6 @@
 const { Command } = require("discord-akairo")
 const { isRolesMessage, linkToMessage } = require("../../functions.js")
+const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "fixReactsForRole",
@@ -9,7 +10,8 @@ const commandInfo = {
 		short: "Gives role to every meeber who has reacted but does not have role",
 		extend: "Also removes reacts from users no longer in the server",
 	},
-	userPermissions: ["MANAGE_ROLES", "MANAGE_MESSAGES"]
+	userPermissions: ["MANAGE_ROLES", "MANAGE_MESSAGES"],
+	category: category
 }
 
 commandInfo.aliases.unshift(commandInfo.id)

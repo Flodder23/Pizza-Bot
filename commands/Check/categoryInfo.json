@@ -1,0 +1,4 @@
+{
+	"name": "Check",
+	"description": "These commands are used to check whether things in the server as as the bot expects.\nFor most commands, if the thing checked is not as the bot expects, you can run the same command with `fix` instead of `check` to try to fix it."
+}

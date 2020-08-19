@@ -1,5 +1,6 @@
 const { Command } = require("discord-akairo");
 const Discord = require("discord.js");
+const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "dice",
@@ -9,7 +10,8 @@ const commandInfo = {
 		short: "Dice.",
 		extend: "Rolls a dice of the given number (6 by default)",
 	},
-	regex: /^\/\d*d\d*(\s|$)/
+	regex: /^\/\d*d\d*(\s|$)/,
+	category: category
 }
 
 //commandInfo.aliases.unshift(commandInfo.id)

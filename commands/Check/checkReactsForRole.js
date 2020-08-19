@@ -1,5 +1,6 @@
 const { Command } = require("discord-akairo")
 const { isRolesMessage, linkToMessage } = require("../../functions.js")
+const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "checkReactsForRole",
@@ -8,7 +9,8 @@ const commandInfo = {
 	description: {
 		short: "Checks that all reacts on the given roles message are from users with the corresponding role.",
 		extend: "If no link to a message is given, the bot will try to find it itself.",
-	}
+	},
+	category: category
 }
 
 commandInfo.aliases.unshift(commandInfo.id)

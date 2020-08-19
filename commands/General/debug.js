@@ -1,5 +1,6 @@
 const { Command } = require("discord-akairo");
 const config = require("../../config.js");
+const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "debug",
@@ -8,7 +9,8 @@ const commandInfo = {
 	description: {
 		short: "Command for debugging",
 		extend: "",
-	}
+	},
+	category: category
 }
 
 commandInfo.aliases.unshift(commandInfo.id)
@@ -24,7 +26,14 @@ class DebugCommand extends Command {
 	}
 
 	async exec(message, args) {
-		bleh
+		for (let [, category] of this.handler.categories) {
+			console.log("CATEGORY:")
+			console.log(category.id)
+			console.log("COMMANDS:")
+			for (let [, command] of category) {
+				console.log(command.id)
+			}
+		}
 	}
 }
 

@@ -1,4 +1,5 @@
 const { Command } = require("discord-akairo");
+const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "echo",
@@ -7,7 +8,8 @@ const commandInfo = {
 	description: {
 		short: "Repeats the message back to you.",
 		extend: "",
-	}
+	},
+	category: category
 }
 
 commandInfo.aliases.unshift(commandInfo.id)

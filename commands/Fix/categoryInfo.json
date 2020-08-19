@@ -1,0 +1,4 @@
+{
+	"name": "Fix",
+	"description": "These commands are used to fix things in the server so they are as the bot expects.\nThese commands often require specific permissions as they do things like manage roles, messages and members"
+}

@@ -11,6 +11,7 @@ catch(error) {
 }
 const waApi = WolframAlphaAPI(waKey);
 const Discord = require("discord.js");
+const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "calc",
@@ -19,7 +20,8 @@ const commandInfo = {
 	description: {
 		short: "Ask a yes/no question.",
 		extend: "",
-	}
+	},
+	category: category
 }
 
 commandInfo.aliases.unshift(commandInfo.id)

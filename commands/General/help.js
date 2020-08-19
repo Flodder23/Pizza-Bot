@@ -1,6 +1,7 @@
 const { Command } = require("discord-akairo");
 const Discord = require("discord.js");
 const config = require("../../config.js");
+const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "help",
@@ -9,7 +10,8 @@ const commandInfo = {
 	description: {
 		short: "Shows help message.",
 		extend: "If no command is given it gives a general overview of all possible commands.",
-	}
+	},
+	category: category
 }
 
 commandInfo.aliases.unshift(commandInfo.id)
@@ -46,28 +48,22 @@ class HelpCommand extends Command {
 				]
 			}})
 		} else if (message.content.split(" ").length == 1) {
-			let cmds = [];
-			for (let item of this.handler.modules) {
-				cmds.push([item[0], item[1].description.short])
-			}
 			return message.channel.send({embed: {
 				color: config.colour,
-				title: "Help",
+				title: "Pizza Bot help",
 				url: `https://github.com/JosephLGibson/Pizza-Bot`,
-				description: `Type \`${this.client.commandHandler.prefix}help <command>\` for more information on a command.`,
 				fields: [
 					{
-						name: "Commands",
-						value: `• ${cmds.map(item => item[0]).join("\n• ")}`,
-						inline: true
-					}, {
-						name: "Description",
-						value: cmds.map(item => item[1]).join("\n"),
-						inline: true
-					}, {
-						name: "Roles",
+						name: " -- Roles -- ",
 						value: `React to the message in ${message.guild.channels.cache.find(c => c.name == "server-info")} to get a role.`
-					}
+					}, {
+						name: " ---- COMMANDS ---- ",
+						value: `Type \`${this.client.commandHandler.prefix}help <command>\` for more information on a command.`
+					},
+					...this.handler.categories.map(category => ({
+						name: ` -- ${category.id} -- `,
+						value: `${require(`../${category.id}/categoryInfo.json`).description}\n\n${category.map(command => `**${command.id} -- **${command.description.short}`).join("\n")}\n\u200B`
+					}))
 				]
 			}})
 		} else {

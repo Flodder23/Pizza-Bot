@@ -1,6 +1,7 @@
 const { Command } = require("discord-akairo");
 const Discord = require("discord.js")
 const moment = require("moment")
+const category = require("./categoryInfo.json").name
 
 
 const commandInfo = {
@@ -10,7 +11,8 @@ const commandInfo = {
 	description: {
 		short: "Shows information about the server.",
 		extend: ""
-	}
+	},
+	category: category
 }
 
 commandInfo.aliases.unshift(commandInfo.id)

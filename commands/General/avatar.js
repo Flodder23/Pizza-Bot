@@ -1,5 +1,6 @@
 const { Command } = require("discord-akairo");
 const Discord = require("discord.js");
+const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "avatar",
@@ -8,7 +9,8 @@ const commandInfo = {
 	description: {
 		short: "Shows avatar of selected user.",
 		extend: "If no user is given, it shows the avatar of the user who called the command.",
-	}
+	},
+	category: category
 }
 
 commandInfo.aliases.unshift(commandInfo.id)
