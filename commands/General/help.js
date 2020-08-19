@@ -1,6 +1,6 @@
 const { Command } = require("discord-akairo");
 const Discord = require("discord.js");
-const config = require("../config.js");
+const config = require("../../config.js");
 
 const commandInfo = {
 	id: "help",

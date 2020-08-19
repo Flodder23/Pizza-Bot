@@ -2,7 +2,7 @@ const { Command } = require("discord-akairo");
 const WolframAlphaAPI = require("wolfram-alpha-api");
 let waKey;
 try {
-	waKey = require("../waKey.json").key;
+	waKey = require("../../waKey.json").key;
 	console.log("Using locally stored Wolfram|Alpha token");
 }
 catch(error) {
