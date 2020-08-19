@@ -53,6 +53,9 @@ class CheckRoleReactsCommand extends Command {
 			let role = message.guild.roles.cache.find(role => role.name.replace(" ", "").toLowerCase() == react.emoji.name.toLowerCase())
 			if (role) {
 				for (let [, u] of await react.users.fetch()) {
+					if (u.id == this.client.user.id) {
+						continue
+					}
 					let member = message.guild.members.cache.find(m => m.id == u.id)
 					if (member) {
 						if (member.roles.cache.some(r => r.id == role.id)) {
