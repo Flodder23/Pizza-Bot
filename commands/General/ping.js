@@ -1,5 +1,4 @@
 const { Command } = require("discord-akairo");
-const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "ping",
@@ -8,13 +7,13 @@ const commandInfo = {
 	description: {
 		short: "Get the bot's ping.",
 		extend: "Gets time taken between the command being sent and the resulting \"pong\" message to be sent.",
-	},
-	category: category
+	}
 }
 
 commandInfo.aliases.unshift(commandInfo.id)
 commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
 commandInfo.description.args = commandInfo.args.map(item => item.id)
+commandInfo.category = __dirname.split("\\").pop()
 
 class PingCommand extends Command {
 	constructor() {

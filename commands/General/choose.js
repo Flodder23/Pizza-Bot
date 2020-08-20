@@ -1,5 +1,4 @@
 const { Command } = require("discord-akairo");
-const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "choose",
@@ -8,13 +7,13 @@ const commandInfo = {
 	description: {
 		short: "Chooses one of the given options for you.",
 		extend: "Options should be seperated by a semi-colon, like this: `option 1; option 2; option 3` etc.",
-	},
-	category: category
+	}
 }
 
 commandInfo.aliases.unshift(commandInfo.id)
 commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
 commandInfo.description.args = commandInfo.args.map(item => item.id)
+commandInfo.category = __dirname.split("\\").pop()
 
 class ChooseCommand extends Command {
 	constructor() {

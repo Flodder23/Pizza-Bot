@@ -11,7 +11,6 @@ catch(error) {
 }
 const waApi = WolframAlphaAPI(waKey);
 const Discord = require("discord.js");
-const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "calc",
@@ -20,13 +19,13 @@ const commandInfo = {
 	description: {
 		short: "Ask a yes/no question.",
 		extend: "",
-	},
-	category: category
+	}
 }
 
 commandInfo.aliases.unshift(commandInfo.id)
 commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
 commandInfo.description.args = commandInfo.args.map(item => item.id)
+commandInfo.category = __dirname.split("\\").pop()
 
 class CalcCommand extends Command {
 	constructor() {

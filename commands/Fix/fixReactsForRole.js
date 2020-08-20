@@ -1,6 +1,5 @@
 const { Command } = require("discord-akairo")
 const { isRolesMessage, linkToMessage } = require("../../functions.js")
-const category = require("./categoryInfo.json").name
 
 const commandInfo = {
 	id: "fixReactsForRole",
@@ -10,13 +9,13 @@ const commandInfo = {
 		short: "Gives role to every meeber who has reacted but does not have role",
 		extend: "Also removes reacts from users no longer in the server",
 	},
-	userPermissions: ["MANAGE_ROLES", "MANAGE_MESSAGES"],
-	category: category
+	userPermissions: ["MANAGE_ROLES", "MANAGE_MESSAGES"]
 }
 
 commandInfo.aliases.unshift(commandInfo.id)
 commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
 commandInfo.description.args = commandInfo.args.map(item => item.id)
+commandInfo.category = __dirname.split("\\").pop()
 
 class FixReactsForRoleCommand extends Command {
 	constructor() {

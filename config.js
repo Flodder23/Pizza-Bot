@@ -1,9 +1,15 @@
 module.exports = {
-	"prefix": "/",
-	"testPrefix": "\\",
-	"colour": 16426522,
-	"owner_id": 286601488703291395,
-	"emoji_letters": [
+	prefix: "/",
+	testPrefix: "\\",
+	colour: 16426522,
+	owner_id: 286601488703291395,
+	categoryInfo: {
+		"Check": "These commands are used to check whether things in the server as as the bot expects.\nFor most commands, if the thing checked is not as the bot expects, you can run the same command with `fix` instead of `check` to try to fix it.",
+		"Fix": "These commands are used to fix things in the server so they are as the bot expects.\nThese commands often require specific permissions as they do things like manage roles, messages and members",
+		"General": "These are commands which didn't really fit into a specific category.",
+		"Info": "These commands get information about various parts of the server."
+	},
+	emoji_letters: [
 		"\u{1f1e6}",
 		"\u{1f1e7}",
 		"\u{1f1e8}",
@@ -31,6 +37,6 @@ module.exports = {
 		"\u{1f1fe}",
 		"\u{1f1ff}"
 	],
-	"yes_react": "593464052957577216",
-	"no_react": "593464111988211712"
+	yes_react: "593464052957577216",
+	no_react: "593464111988211712"
 }

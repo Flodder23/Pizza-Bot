@@ -1,7 +1,6 @@
 const { Command } = require("discord-akairo");
 const Discord = require("discord.js");
-const config = require("../../config.js");
-const category = require("./categoryInfo.json").name
+const { colour, categoryInfo } = require("../../config.js");
 
 const commandInfo = {
 	id: "help",
@@ -10,13 +9,13 @@ const commandInfo = {
 	description: {
 		short: "Shows help message.",
 		extend: "If no command is given it gives a general overview of all possible commands.",
-	},
-	category: category
+	}
 }
 
 commandInfo.aliases.unshift(commandInfo.id)
 commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
 commandInfo.description.args = commandInfo.args.map(item => item.id)
+commandInfo.category = __dirname.split("\\").pop()
 
 class HelpCommand extends Command {
 	constructor() {
@@ -28,7 +27,7 @@ class HelpCommand extends Command {
 	exec(message, args) {
 		if (args.command) {
 			return message.channel.send({embed: {
-				color: config.colour,
+				color: colour,
 				title: `**Help for ${args.command.id} command**`,
 				url: `https://github.com/JosephLGibson/Pizza-Bot/tree/master/commands/${args.command.id}.js`,
 				fields: [
@@ -49,7 +48,7 @@ class HelpCommand extends Command {
 			}})
 		} else if (message.content.split(" ").length == 1) {
 			return message.channel.send({embed: {
-				color: config.colour,
+				color: colour,
 				title: "Pizza Bot help",
 				url: `https://github.com/JosephLGibson/Pizza-Bot`,
 				fields: [
@@ -62,7 +61,7 @@ class HelpCommand extends Command {
 					},
 					...this.handler.categories.map(category => ({
 						name: ` -- ${category.id} -- `,
-						value: `${require(`../${category.id}/categoryInfo.json`).description}\n${category.map(command => `• **${command.id} -- **${command.description.short}`).join("\n")}`
+						value: `${categoryInfo[category.id]}\n${category.map(command => `• **${command.id} -- **${command.description.short}`).join("\n")}`
 					}))
 				]
 			}})
