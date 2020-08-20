@@ -62,7 +62,7 @@ class HelpCommand extends Command {
 					},
 					...this.handler.categories.map(category => ({
 						name: ` -- ${category.id} -- `,
-						value: `${require(`../${category.id}/categoryInfo.json`).description}\n\n${category.map(command => `**${command.id} -- **${command.description.short}`).join("\n")}\n\u200B`
+						value: `${require(`../${category.id}/categoryInfo.json`).description}\n${category.map(command => `• **${command.id} -- **${command.description.short}`).join("\n")}`
 					}))
 				]
 			}})
