@@ -2,11 +2,11 @@ const { Command } = require("discord-akairo")
 const { isRolesMessage, linkToMessage } = require("../../functions.js")
 
 const commandInfo = {
-	id: "checkReactsForRole",
+	id: "checkRolesForReact",
 	aliases: [],
 	args: [{id: "messageLink", type: "string"}],
 	description: {
-		short: "Checks that all reacts on the given roles message are from users with the corresponding role.",
+		short: "Checks that all users with a role with a corresponding emoji have done the appropriate react.",
 		extend: "If no link to a message is given, the bot will try to find it itself.",
 	}
 }
@@ -16,7 +16,7 @@ commandInfo.description.long = commandInfo.description.short + "\n" + commandInf
 commandInfo.description.args = commandInfo.args.map(item => item.id)
 commandInfo.category = __dirname.split("\\").pop()
 
-class CheckReactsForRoleCommand extends Command {
+class CheckRolesForReactCommand extends Command {
 	constructor() {
 		super(
 			commandInfo.id,
@@ -45,44 +45,45 @@ class CheckReactsForRoleCommand extends Command {
 				return await message.channel.send({ embed: { description: "Couldn't find role message. Use the `checkRoleMessage` command for more info." } })
 			}
 		}
-		let valid = 0,				// The react was valid
-			memberWithoutRole = 0,	// The member who reacted does not have the role 
-			leftMembers = 0,		// The member has left
-			reactWithoutBot = 0,	// The bot has not done this valid reaction
-			reactWithoutRole = 0;	// The react does not have an asssociated role
+		let reactUsers = {};
 		for (let [, react] of roleMessage.reactions.cache) {
-			let role = message.guild.roles.cache.find(role => role.name.replace(" ", "").toLowerCase() == react.emoji.name.toLowerCase())
-			if (role) {
-				for (let [, u] of await react.users.fetch()) {
-					if (u.id == this.client.user.id) {
-						continue
-					}
-					let member = message.guild.members.cache.find(m => m.id == u.id)
-					if (member) {
-						if (member.roles.cache.some(r => r.id == role.id)) {
-							valid ++;
-						} else {
-							memberWithoutRole ++;
-						}
+			reactUsers[react.emoji.name.toLowerCase()] = await react.users.fetch()
+		}
+		let valid = 0,
+			noReact = 0,
+			noEmoji = {};
+		for (let [, member] of message.guild.members.cache.filter(m => !m.user.bot)) {
+			for (let [, role] of member.roles.cache) {
+				if (role.name == "@everyone") {
+					continue
+				}
+				let roleName = role.name.replace(" ", "").toLowerCase()
+				if (reactUsers[roleName]) {
+					if (reactUsers[roleName].some(u => u.id == member.user.id)) {
+						valid ++;
 					} else {
-						leftMembers ++;
+						noReact ++;
+					}
+				} else {
+					if (noEmoji[role.id]) {
+						noEmoji[role.id] ++;
+					} else {
+						noEmoji[role.id] = 1
 					}
 				}
-				if (!react.me) {
-					reactWithoutBot ++;
-				}
-			} else {
-				reactWithoutRole ++;
 			}
 		}
-		return await message.channel.send({ embed: {
-			title: "checkReactsForRole results",
+		let noEmojiList = []
+		for (let id in noEmoji) {
+			noEmojiList.push(`	<@&${id}>: \`${noEmoji[id]}\` users have this role`)
+		}
+		return await message.channel.send({embed: {
+			title: "checkRolesForReact results",
 			description:`Checked [this message](${roleMessage.url})
-			\`${valid}\` valid reacts
-			\`${memberWithoutRole}\` reacts are from users who don't have the associated role
-			\`${leftMembers}\` reactions are from users who are no longer in the server
-			\`${reactWithoutBot}\` are valid reactions that the bot hasn't reacted with
-			\`${reactWithoutRole}\` reacts don't have an associated role
+			\`${valid}\` roles matched with a react
+			\`${noReact}\` roles had an associated react but the user hadn't done the react
+			\`${noEmojiList.length}\` roles had no associated emojis:
+			${noEmojiList.join("\n")}
 			
 			Wrong message found? Run the \`checkRoleMessage\` command for help.`,
 		}})
@@ -90,4 +91,4 @@ class CheckReactsForRoleCommand extends Command {
 }
 
 
-module.exports = CheckReactsForRoleCommand;
+module.exports = CheckRolesForReactCommand;
