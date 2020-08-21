@@ -1,5 +1,5 @@
 const { Command } = require("discord-akairo")
-const { isRolesMessage, linkToMessage } = require("../../functions.js")
+const { getRoleMessage } = require("../../functions.js")
 
 const commandInfo = {
 	id: "fixRolesForReact",
@@ -26,25 +26,9 @@ class FixRolesForReactCommand extends Command {
 	}
 
 	async exec(message, args) {
-		let roleMessage;
-		if (args.messageLink) {
-			roleMessage = linkToMessage(args.messageLink, message.guild)
-			if (typeof roleMessage == "string") {
-				return await message.channel.send({ embed: { description: roleMessage } })
-			} else if (!isRolesMessage(message)) {
-				return await message.channel.send({ embed: { description: "Not a valid role message. Use the `checkRoleMessage` command for more info." } })
-			}
-		} else {
-			let channels = message.guild.channels.cache.filter(c => c.name == "server-info" && c.type == "text")
-			for (let [, c] of channels) {
-				roleMessage = c.messages.cache.find(m => m.author.id == this.client.user.id && m.content.startsWith("**ROLES**"))
-				if (roleMessage) {
-					break
-				}
-			}
-			if (!roleMessage) {
-				return await message.channel.send({ embed: { description: "Couldn't find role message. Use the `checkRoleMessage` command for more info." } })
-			}
+		let roleMessage = getRoleMessage(message.guild, this.client.user.id)
+		if (typeof roleMessage == "string") {
+			return await message.channel.send({ embed: { description: roleMessage } })
 		}
 		let reactUsers = {};
 		for (let [, react] of roleMessage.reactions.cache) {

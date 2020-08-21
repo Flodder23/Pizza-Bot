@@ -56,5 +56,43 @@ module.exports = {
 		} else {
 			return "Server ID does not match."
 		}
+	},
+	checkRoleMessage: function(message, botID) {
+		let output = []
+		if (message.author.id != botID) {
+			output.push("Message not sent by this bot - to get bot to send a message, use the `echo` command.")
+		}
+		if (message.channel.name != "server-info") {
+			output.push("Message must be in channel called `server-info`.")
+		}
+		if (!message.content.startsWith("**ROLES**")) {
+			output.push("Message must start with \"**ROLES**\" (to get bold effect, type `**ROLES**`)")
+		}
+		if (output.length == 0) {
+			return "Roles message is valid."
+		} else {
+			return output.join("\n")
+		}
+	},
+	getRoleMessage: function(guild, botID, stopAtFirst=true) {
+		let channels = guild.channels.cache.filter(c => c.name == "server-info" && c.type == "text")
+		if (channels.size == 0) {
+			return "Could not find channel named `server-info`."
+		}
+		if (stopAtFirst) {
+			for (let [, c] of channels) {
+				let roleMessage = c.messages.cache.find(m => m.author.id == botID && m.content.startsWith("**ROLES**"))
+				if (roleMessage) {
+					return roleMessage
+				}
+			}
+			return "Couldn't find role message. Use the `checkRoleMessage` command for more info."
+		} else {
+			let roleMessages = []
+			for (let [, c] of channels) {
+				roleMessages.push(...c.messages.cache.filter(m => m.author.id == botID && m.content.startsWith("**ROLES**")).array())
+			}
+			return roleMessages
+		}
 	}
 }

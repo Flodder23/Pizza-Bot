@@ -1,5 +1,5 @@
 const { Command } = require("discord-akairo")
-const { isRolesMessage, linkToMessage } = require("../../functions.js")
+const { getRoleMessage } = require("../../functions.js")
 
 const commandInfo = {
 	id: "checkReactsForRole",
@@ -25,36 +25,22 @@ class CheckReactsForRoleCommand extends Command {
 	}
 
 	async exec(message, args) {
-		let roleMessage;
-		if (args.messageLink) {
-			roleMessage = linkToMessage(args.messageLink, message.guild)
-			if (typeof roleMessage == "string") {
-				return await message.channel.send({ embed: { description: roleMessage } })
-			} else if (!isRolesMessage(message)) {
-				return await message.channel.send({ embed: { description: "Not a valid role message. Use the `checkRoleMessage` command for more info." } })
-			}
-		} else {
-			let channels = message.guild.channels.cache.filter(c => c.name == "server-info" && c.type == "text")
-			for (let [, c] of channels) {
-				roleMessage = c.messages.cache.find(m => m.author.id == this.client.user.id && m.content.startsWith("**ROLES**"))
-				if (roleMessage) {
-					break
-				}
-			}
-			if (!roleMessage) {
-				return await message.channel.send({ embed: { description: "Couldn't find role message. Use the `checkRoleMessage` command for more info." } })
-			}
+		let roleMessage = getRoleMessage(message.guild, this.client.user.id)
+		if (typeof roleMessage == "string") {
+			return await message.channel.send({ embed: { description: roleMessage } })
 		}
 		let valid = 0,				// The react was valid
 			memberWithoutRole = 0,	// The member who reacted does not have the role 
 			leftMembers = 0,		// The member has left
 			reactWithoutBot = 0,	// The bot has not done this valid reaction
+			botReacts = 0,			// The bot did this reaction
 			reactWithoutRole = 0;	// The react does not have an asssociated role
 		for (let [, react] of roleMessage.reactions.cache) {
 			let role = message.guild.roles.cache.find(role => role.name.replace(" ", "").toLowerCase() == react.emoji.name.toLowerCase())
 			if (role) {
 				for (let [, u] of await react.users.fetch()) {
 					if (u.id == this.client.user.id) {
+						botReacts ++;
 						continue
 					}
 					let member = message.guild.members.cache.find(m => m.id == u.id)
@@ -79,6 +65,7 @@ class CheckReactsForRoleCommand extends Command {
 			title: "checkReactsForRole results",
 			description:`Checked [this message](${roleMessage.url})
 			\`${valid}\` valid reacts
+			\`${botReacts}\` valid reacts from the bot
 			\`${memberWithoutRole}\` reacts are from users who don't have the associated role
 			\`${leftMembers}\` reactions are from users who are no longer in the server
 			\`${reactWithoutBot}\` are valid reactions that the bot hasn't reacted with
