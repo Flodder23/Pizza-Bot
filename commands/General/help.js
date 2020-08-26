@@ -1,22 +1,20 @@
-const { Command } = require("discord-akairo");
-const Discord = require("discord.js");
-const { colour, categoryInfo } = require("../../config.js");
+const { Command } = require("discord-akairo")
+const Discord = require("discord.js")
+const { colour, categoryInfo } = require("../../config.js")
+const { constructCommandInfo } = require("../../functions.js")
 
-const commandInfo = {
-	id: "help",
-	aliases: ["info", "command"],
-	args: [{id: "command", type: "commandAlias"}],
-	description: {
-		short: "Shows help message.",
-		extend: "If no command is given it gives a general overview of all possible commands.",
-	}
-}
-
-commandInfo.aliases.unshift(commandInfo.id)
-commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
-commandInfo.description.args = commandInfo.args.map(item => item.id)
-commandInfo.category = __dirname.split("\\").pop()
-
+const commandInfo = constructCommandInfo(
+	{
+		id: "help",
+		aliases: ["info", "command"],
+		args: [{id: "command", type: "commandAlias"}],
+		description: {
+			short: "Shows help message.",
+			extend: "If no command is given it gives a general overview of all possible commands.",
+		}
+	},
+	__dirname
+)
 class HelpCommand extends Command {
 	constructor() {
 		super(

@@ -1,20 +1,18 @@
 const { Command } = require("discord-akairo")
-const { getRoleMessage } = require("../../functions.js")
+const { constructCommandInfo, getRoleMessage } = require("../../functions.js")
 
-const commandInfo = {
-	id: "checkReactsForRole",
-	aliases: [],
-	args: [{id: "messageLink", type: "string"}],
-	description: {
-		short: "Checks that all reacts on the given roles message are from users with the corresponding role.",
-		extend: "If no link to a message is given, the bot will try to find it itself.",
-	}
-}
-
-commandInfo.aliases.unshift(commandInfo.id)
-commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
-commandInfo.description.args = commandInfo.args.map(item => item.id)
-commandInfo.category = __dirname.split("\\").pop()
+const commandInfo = constructCommandInfo(
+	{
+		id: "checkReactsForRole",
+		aliases: [],
+		args: [{id: "messageLink", type: "string"}],
+		description: {
+			short: "Checks that all reacts on the given roles message are from users with the corresponding role.",
+			extend: "If no link to a message is given, the bot will try to find it itself.",
+		}
+	},
+	__dirname
+)
 
 class CheckReactsForRoleCommand extends Command {
 	constructor() {

@@ -1,19 +1,18 @@
-const { Command } = require("discord-akairo");
+const { Command } = require("discord-akairo")
+const { constructCommandInfo } = require("../../functions.js")
 
-const commandInfo = {
-	id: "echo",
-	aliases: ["say"],
-	args: [{id: "message", type: "string", default: "You need to specify what to echo", match: "content"}],
-	description: {
-		short: "Repeats the message back to you.",
-		extend: "",
-	}
-}
-
-commandInfo.aliases.unshift(commandInfo.id)
-commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
-commandInfo.description.args = commandInfo.args.map(item => item.id)
-commandInfo.category = __dirname.split("\\").pop()
+const commandInfo = constructCommandInfo(
+	{
+		id: "echo",
+		aliases: ["say"],
+		args: [{id: "message", type: "string", default: "You need to specify what to echo", match: "content"}],
+		description: {
+			short: "Repeats the message back to you.",
+			extend: "",
+		}
+	},
+	__dirname
+)
 
 class EchoCommand extends Command {
 	constructor() {

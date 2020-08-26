@@ -1,19 +1,18 @@
-const { Command } = require("discord-akairo");
+const { Command } = require("discord-akairo")
+const { constructCommandInfo } = require("../../functions.js")
 
-const commandInfo = {
-	id: "rps",
-	aliases: ["rockpaperscissors"],
-	args: [{id: "choice", type: "string"}],
-	description: {
-		short: "Play Rock Paper Scissors.",
-		extend: "Replies with its choice and says who, if anyone, won.",
-	}
-}
-
-commandInfo.aliases.unshift(commandInfo.id)
-commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
-commandInfo.description.args = commandInfo.args.map(item => item.id)
-commandInfo.category = __dirname.split("\\").pop()
+const commandInfo = constructCommandInfo(
+	{
+		id: "rps",
+		aliases: ["rockpaperscissors"],
+		args: [{id: "choice", type: "string"}],
+		description: {
+			short: "Play Rock Paper Scissors.",
+			extend: "Replies with its choice and says who, if anyone, won.",
+		}
+	},
+	__dirname
+)
 
 class rpsCommand extends Command {
 	constructor() {

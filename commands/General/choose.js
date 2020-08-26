@@ -1,19 +1,18 @@
-const { Command } = require("discord-akairo");
+const { Command } = require("discord-akairo")
+const { constructCommandInfo } = require("../../functions.js")
 
-const commandInfo = {
-	id: "choose",
-	aliases: ["pick"],
-	args: [{id: "options", type: "string", match: "content"}],
-	description: {
-		short: "Chooses one of the given options for you.",
-		extend: "Options should be seperated by a semi-colon, like this: `option 1; option 2; option 3` etc.",
-	}
-}
-
-commandInfo.aliases.unshift(commandInfo.id)
-commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
-commandInfo.description.args = commandInfo.args.map(item => item.id)
-commandInfo.category = __dirname.split("\\").pop()
+const commandInfo = constructCommandInfo(
+	{
+		id: "choose",
+		aliases: ["pick"],
+		args: [{id: "options", type: "string", match: "content"}],
+		description: {
+			short: "Chooses one of the given options for you.",
+			extend: "Options should be seperated by a semi-colon, like this: `option 1; option 2; option 3` etc.",
+		}
+	},
+	__dirname
+)
 
 class ChooseCommand extends Command {
 	constructor() {

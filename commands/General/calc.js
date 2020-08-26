@@ -1,31 +1,30 @@
-const { Command } = require("discord-akairo");
-const WolframAlphaAPI = require("wolfram-alpha-api");
+const { Command } = require("discord-akairo")
+const Discord = require("discord.js")
+const { constructCommandInfo } = require("../../functions.js")
+const WolframAlphaAPI = require("wolfram-alpha-api")
 let waKey;
 try {
-	waKey = require("../../waKey.json").key;
-	console.log("Using locally stored Wolfram|Alpha token");
+	waKey = require("../../waKey.json").key
+	console.log("Using locally stored Wolfram|Alpha token")
 }
 catch(error) {
-	waKey = process.env.WATOKEN;
-	console.log("Starting using Wolfram|Alpha token stored on Heroku...");
+	waKey = process.env.WATOKEN
+	console.log("Starting using Wolfram|Alpha token stored on Heroku...")
 }
-const waApi = WolframAlphaAPI(waKey);
-const Discord = require("discord.js");
+const waApi = WolframAlphaAPI(waKey)
 
-const commandInfo = {
-	id: "calc",
-	aliases: ["calculate", "wolfram"],
-	args: [{id: "calculation", type: "string", default: "", match: "content"}],
-	description: {
-		short: "Ask a yes/no question.",
-		extend: "",
-	}
-}
-
-commandInfo.aliases.unshift(commandInfo.id)
-commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
-commandInfo.description.args = commandInfo.args.map(item => item.id)
-commandInfo.category = __dirname.split("\\").pop()
+const commandInfo = constructCommandInfo(
+	{
+		id: "calc",
+		aliases: ["calculate", "wolfram"],
+		args: [{id: "calculation", type: "string", default: "", match: "content"}],
+		description: {
+			short: "Ask a yes/no question.",
+			extend: "",
+		}
+	},
+	__dirname
+)
 
 class CalcCommand extends Command {
 	constructor() {

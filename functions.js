@@ -1,4 +1,15 @@
 module.exports = {
+	constructCommandInfo: function (info, dir) {
+		info.aliases.unshift(info.id)
+		info.description.long = info.description.short + "\n" + info.description.extend
+		info.description.args = info.args.map(item => item.id)
+		if (dir.includes("/")) {
+			info.category = dir.split("/").pop()
+		} else {
+			info.category = dir.split("\\").pop()
+		}
+		return info
+	},
 	getPing: function (str, guild) {
 		if (str.match(/^<@(&|!?)\d{17,19}>$/)) {  // if it's already a ping
 			return str

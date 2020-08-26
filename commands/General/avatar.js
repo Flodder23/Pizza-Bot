@@ -1,20 +1,19 @@
-const { Command } = require("discord-akairo");
-const Discord = require("discord.js");
+const { Command } = require("discord-akairo")
+const Discord = require("discord.js")
+const { constructCommandInfo } = require("../../functions.js")
 
-const commandInfo = {
-	id: "avatar",
-	aliases: ["pic"],
-	args: [{id: "member", type: "member"}],
-	description: {
-		short: "Shows avatar of selected user.",
-		extend: "If no user is given, it shows the avatar of the user who called the command.",
-	}
-}
-
-commandInfo.aliases.unshift(commandInfo.id)
-commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
-commandInfo.description.args = commandInfo.args.map(item => item.id)
-commandInfo.category = __dirname.split("\\").pop()
+const commandInfo = constructCommandInfo(
+	{
+		id: "avatar",
+		aliases: ["pic"],
+		args: [{id: "member", type: "member"}],
+		description: {
+			short: "Shows avatar of selected user.",
+			extend: "If no user is given, it shows the avatar of the user who called the command.",
+		}
+	},
+	__dirname
+)
 
 class AvatarCommand extends Command {
 	constructor() {

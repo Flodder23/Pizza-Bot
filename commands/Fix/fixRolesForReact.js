@@ -1,21 +1,19 @@
 const { Command } = require("discord-akairo")
-const { getRoleMessage } = require("../../functions.js")
+const { constructCommandInfo, getRoleMessage } = require("../../functions.js")
 
-const commandInfo = {
-	id: "fixRolesForReact",
-	aliases: [],
-	args: [{id: "messageLink", type: "string"}],
-	description: {
-		short: "Removes roles from users who haven't given appropriate react.",
-		extend: "If no link to a message is given, the bot will try to find it itself.",
+const commandInfo = constructCommandInfo(
+	{
+		id: "fixRolesForReact",
+		aliases: [],
+		args: [{id: "messageLink", type: "string"}],
+		description: {
+			short: "Removes roles from users who haven't given appropriate react.",
+			extend: "If no link to a message is given, the bot will try to find it itself.",
+		},
+		userPermissions: ["MANAGE_ROLES"]
 	},
-	userPermissions: ["MANAGE_ROLES"]
-}
-
-commandInfo.aliases.unshift(commandInfo.id)
-commandInfo.description.long = commandInfo.description.short + "\n" + commandInfo.description.extend
-commandInfo.description.args = commandInfo.args.map(item => item.id)
-commandInfo.category = __dirname.split("\\").pop()
+	__dirname
+)
 
 class FixRolesForReactCommand extends Command {
 	constructor() {
