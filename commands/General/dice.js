@@ -10,7 +10,7 @@ const commandInfo = constructCommandInfo(
 		args: [{id: "options", type: "string", default: "d6", match: "content"}],
 		description: {
 			short: "Dice.",
-			extend: "Rolls a dice of the given number (6 by default).\nOptions should look like `d6`, `4d20` etc.\nYou can also just type `=4d20` to use this command.",
+			extend: "Rolls a dice of the given number (6 by default).\nOptions should look like `d6`, `4d20` etc.\nYou can also just type `/4d20`.",
 		},
 		regex: diceRegex
 	},
