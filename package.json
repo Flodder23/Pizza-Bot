@@ -7,9 +7,10 @@
 		"start": "node main.js"
 	},
 	"dependencies": {
-		"discord.js": "^12.3.1",
 		"discord-akairo": "^8.1.0",
-		"wolfram-alpha-api": "./wolfram-alpha-api",
-		"moment": "^2.27.0"
+		"discord.js": "^12.4.0",
+		"moment": "^2.27.0",
+		"nodemon": "^2.0.6",
+		"wolfram-alpha-api": "./wolfram-alpha-api"
 	}
 }

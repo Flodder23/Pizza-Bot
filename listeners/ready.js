@@ -65,12 +65,12 @@ class ReadyListener extends Listener {
 			}
 		}
 		await this.client.user.setPresence(
-			{
+			{	
+				status: "online",
 				activity: {
 					name: "/help",
 					type: "LISTENING"
 				},
-				status: "online"
 			}
 		)
 		console.log("Ready!")
