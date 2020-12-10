@@ -15,7 +15,7 @@ class ReactRoleAddListener extends Listener {
 	async exec(messageReaction, user) {
 		let message = messageReaction.message;
 		let member = await messageReaction.message.guild.members.fetch(user)
-		if (message.channel.type != "dm" && this.client.testMode == (message.guild.name == "Lonely Joe")) {
+		if (message.channel.type != "dm" && this.client.testMode == (message.guild.id == "394948324999954432")) {
 			if (isRolesMessage(message, this.client.user.id)) {
 				let role = message.guild.roles.cache.find(r => r.name.replace(" ", "").toLowerCase() == messageReaction.emoji.name.toLowerCase())
 				if (role) {

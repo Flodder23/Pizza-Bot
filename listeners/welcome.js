@@ -12,7 +12,7 @@ class WelcomeListener extends Listener {
 	}
 
 	exec(member) {
-		if (this.client.testMode == (member.guild.name == "Lonely Joe")) {
+		if (this.client.testMode == (member.guild.id == "394948324999954432")) {
 			member.guild.systemChannel.send(`Welcome to the **${member.guild.name}** server, ${member}`);
 		}
 	}

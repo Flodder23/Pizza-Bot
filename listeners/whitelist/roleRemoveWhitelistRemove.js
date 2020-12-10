@@ -12,7 +12,7 @@ class roleRemoveWhitelistRemoveListener extends Listener {
 	}
 
 	async exec(oldMember, newMember) {
-		if (this.client.testMode == (oldMember.guild.name == "Lonely Joe")) {
+		if (this.client.testMode == (oldMember.guild.id == "394948324999954432")) {
 			let roleRemoved = await oldMember.roles.cache.find(r => !newMember.roles.cache.has(r.id))
 			if (roleRemoved && roleRemoved.name == "Minecraft") {
 				let ch_whitelist = await newMember.guild.channels.cache.find(c => c.name == "whitelist")

@@ -13,7 +13,7 @@ class messageDeleteUsernameDeleteListener extends Listener {
 	}
 
 	async exec(message) {
-		if (message.channel.type != "dm" && this.client.testMode == (message.guild.name == "Lonely Joe")) {
+		if (message.channel.type != "dm" && this.client.testMode == (message.guild.id == "394948324999954432")) {
 			if (message.channel.name == "whitelist") {
 				if (message.author.id != this.client.user.id) {
 					if (checkValid.test(message.content)) {

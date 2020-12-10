@@ -22,7 +22,7 @@ class ReadyListener extends Listener {
 		} else {
 			output += "Started in normal mode\n"
 		}
-		for (let [, guild] of this.client.guilds.cache.filter(g => this.client.testMode != (g.name != "Lonely Joe"))) {
+		for (let [, guild] of this.client.guilds.cache.filter(g => this.client.testMode == (g.id == "394948324999954432"))) {
 			await guild.members.fetch()
 			let ch_server_info = guild.channels.cache.find(c => c.name == "server-info")
 			if (ch_server_info) {
@@ -31,8 +31,10 @@ class ReadyListener extends Listener {
 					output += `Found roles message for ${guild.name}\n`
 				}
 			}
-			if (guild.channels.cache.some(g => g.name == "whitelist")) {
+			let ch_whitelist = guild.channels.cache.find(c => c.name == "whitelist")
+			if (ch_whitelist) {
 				output += `Found whitelist channel for ${guild.name}\n`
+				await ch_whitelist.messages.fetch({ limit: 100 })
 			}
 			if (!ownerUser) {
 				let ownerMember = await guild.members.cache.find(m => m.id == this.client.ownerID)

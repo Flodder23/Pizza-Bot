@@ -12,7 +12,7 @@ class WhitelistRemoveOnLeave extends Listener {
 	}
 
 	async exec(member) {
-		if (this.client.testMode == (member.guild.name == "Lonely Joe")) {
+		if (this.client.testMode == (member.guild.id == "394948324999954432")) {
 			let messages = await member.guild.channels.cache.find(c => c.type == "text" && c.name == "whitelist").messages.fetch({ limit: 100 });
 			for (let [, m] of messages.filter(m => m.author.id == member.id)) {
 				await m.delete()

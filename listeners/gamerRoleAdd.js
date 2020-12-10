@@ -12,7 +12,7 @@ class gamerRoleAdd extends Listener {
 	}
 
 	exec(member) {
-		if (this.client.testMode == (member.guild.name == "Lonely Joe")) {
+		if (this.client.testMode == (member.guild.id == "394948324999954432")) {
 			return member.roles.add(member.guild.roles.cache.find(r => r.name == "Gamers"))
 		}
 	}
