@@ -57,9 +57,11 @@ class PollCommand extends Command {
 		for (let o of options) {
 			await sent.react(o[0]);
 		}
+		/*
 		if (message.channel.type != "dm" && !this.client.testMode) {
 			return await message.delete()
 		}
+		*/
 	}
 }
 

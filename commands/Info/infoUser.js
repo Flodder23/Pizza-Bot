@@ -5,7 +5,7 @@ const { constructCommandInfo } = require("../../functions.js")
 const commandInfo = constructCommandInfo(
     {
         id: "infoUser",
-        aliases: ["userInfo", "infoMember", "memberInfo"],
+        aliases: ["userInfo", "infoMember", "memberInfo", "profile"],
         args: [{id: "member", type: "member"}],
         description: {
             short: "Shows information about the given user/member",
