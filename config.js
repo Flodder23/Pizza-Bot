@@ -1,6 +1,6 @@
 module.exports = {
-	prefix: "/",
-	testPrefix: "\\",
+	prefix: ".",
+	testPrefix: ",",
 	colour: 16426522,
 	owner_id: 286601488703291395,
 	categoryInfo: {
